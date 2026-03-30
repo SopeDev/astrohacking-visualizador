@@ -25,7 +25,73 @@ function rowMeta(row) {
     const p = NATURAL_PLANETS[row.planetKey]
     return { label: p.label, symbol: p.glyph }
   }
+  if (row.key === 'northNode') {
+    return { label: 'Nodo Norte', symbol: '\u260A' }
+  }
   return { label: 'Ascendente', symbol: null }
+}
+
+/** Bloque etiqueta + select de signo (reutilizado en tarjetas y pareja Asc / Nodo Norte) */
+function AssignSignField({ rowKey, label, symbol, value, onValueChange }) {
+  return (
+    <div className="grid gap-3 sm:grid-cols-[1fr_minmax(11rem,1fr)] sm:items-center sm:gap-4">
+      <div className="flex min-w-0 items-center gap-3">
+        {symbol ? (
+          <span
+            className="font-astro text-xl leading-none text-primary tabular-nums"
+            aria-hidden
+          >
+            {astroGlyphForDisplay(symbol)}
+          </span>
+        ) : (
+          <span className="font-mono text-muted-foreground text-xs tracking-wide">
+            Asc
+          </span>
+        )}
+        <Label
+          htmlFor={`sign-${rowKey}`}
+          className="text-foreground cursor-default font-medium"
+        >
+          {label}
+        </Label>
+      </div>
+
+      <Select value={value} onValueChange={onValueChange}>
+        <SelectTrigger
+          id={`sign-${rowKey}`}
+          size="default"
+          className="h-10 min-h-10 w-full max-w-none border-input/80 bg-background/50 dark:bg-input/25"
+        >
+          <SelectValue placeholder="Elige un signo">
+            {(v) => {
+              const s = getSignById(v)
+              if (!s) return null
+              return (
+                <span className="flex items-center gap-2">
+                  <span className="font-astro text-base text-primary">
+                    {astroGlyphForDisplay(s.glyph)}
+                  </span>
+                  <span>{s.label}</span>
+                </span>
+              )
+            }}
+          </SelectValue>
+        </SelectTrigger>
+        <SelectContent align="start" className="max-h-[min(320px,50vh)]">
+          {ZODIAC_SIGNS.map((sign) => (
+            <SelectItem key={sign.id} value={sign.id}>
+              <span className="flex items-center gap-2">
+                <span className="font-astro text-base text-primary">
+                  {astroGlyphForDisplay(sign.glyph)}
+                </span>
+                {sign.label}
+              </span>
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  )
 }
 
 export function AssignmentScreen() {
@@ -66,7 +132,7 @@ export function AssignmentScreen() {
         aria-hidden
         className="pointer-events-none fixed inset-0 bg-[radial-gradient(ellipse_75%_45%_at_50%_-18%,oklch(0.28_0.07_285/0.35),transparent_55%)]"
       />
-      <div className="relative mx-auto max-w-xl px-4 py-14 sm:px-6 sm:py-20">
+      <div className="relative mx-auto max-w-5xl px-4 py-14 sm:px-6 sm:py-20">
         <header className="mb-12 space-y-3 text-center sm:text-left">
           <p className="text-xs font-medium tracking-[0.2em] text-primary/80 uppercase">
             Astrohacking
@@ -75,82 +141,64 @@ export function AssignmentScreen() {
             Asignación de signos
           </h1>
           <p className="text-muted-foreground text-sm leading-relaxed">
-            Elige el signo zodiacal que corresponde a cada cuerpo celeste y al
-            ascendente. Esto prepara el mapa hacia el Árbol de la vida.
+            Elige el signo zodiacal que corresponde a cada cuerpo celeste, al
+            ascendente y al nodo norte. Esto prepara el mapa hacia el Árbol de la
+            vida.
           </p>
         </header>
 
         <form onSubmit={handleSubmit} className="space-y-2">
-          <div className="divide-border/40 divide-y rounded-xl border border-border/70 bg-card/40 px-4 shadow-sm backdrop-blur-sm sm:px-5">
-            {ASSIGNMENT_ROWS.map((row) => {
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {ASSIGNMENT_ROWS.map((row, index) => {
+              if (row.key === 'northNode') return null
+
+              if (row.key === 'ascendant') {
+                const northDef = ASSIGNMENT_ROWS[index + 1]
+                const northMeta =
+                  northDef?.key === 'northNode' ? rowMeta(northDef) : null
+                return (
+                  <div
+                    key="ascendant-north-node"
+                    className="rounded-xl border border-border/70 bg-card/40 p-4 shadow-sm backdrop-blur-sm sm:col-span-2 sm:p-5"
+                  >
+                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
+                      <AssignSignField
+                        rowKey="ascendant"
+                        label="Ascendente"
+                        symbol={null}
+                        value={assignments.ascendant}
+                        onValueChange={(signId) => setSign('ascendant', signId)}
+                      />
+                      {northMeta && northDef ? (
+                        <AssignSignField
+                          rowKey="northNode"
+                          label={northMeta.label}
+                          symbol={northMeta.symbol}
+                          value={assignments.northNode}
+                          onValueChange={(signId) =>
+                            setSign('northNode', signId)
+                          }
+                        />
+                      ) : null}
+                    </div>
+                  </div>
+                )
+              }
+
               const { label, symbol } = rowMeta(row)
               const value = assignments[row.key]
               return (
                 <div
                   key={row.key}
-                  className="grid gap-3 py-5 sm:grid-cols-[1fr_minmax(12rem,16rem)] sm:items-center sm:gap-6"
+                  className="rounded-xl border border-border/70 bg-card/40 p-4 shadow-sm backdrop-blur-sm sm:p-5"
                 >
-                  <div className="flex min-w-0 items-center gap-3">
-                    {symbol ? (
-                      <span
-                        className="font-astro text-xl leading-none text-primary tabular-nums"
-                        aria-hidden
-                      >
-                        {astroGlyphForDisplay(symbol)}
-                      </span>
-                    ) : (
-                      <span className="font-mono text-muted-foreground text-xs tracking-wide">
-                        Asc
-                      </span>
-                    )}
-                    <Label
-                      htmlFor={`sign-${row.key}`}
-                      className="text-foreground cursor-default font-medium"
-                    >
-                      {label}
-                    </Label>
-                  </div>
-
-                  <Select
+                  <AssignSignField
+                    rowKey={row.key}
+                    label={label}
+                    symbol={symbol}
                     value={value}
                     onValueChange={(signId) => setSign(row.key, signId)}
-                  >
-                    <SelectTrigger
-                      id={`sign-${row.key}`}
-                      size="default"
-                      className="h-10 min-h-10 w-full max-w-none border-input/80 bg-background/50 sm:w-full dark:bg-input/25"
-                    >
-                      <SelectValue placeholder="Elige un signo">
-                        {(v) => {
-                          const s = getSignById(v)
-                          if (!s) return null
-                          return (
-                            <span className="flex items-center gap-2">
-                              <span className="font-astro text-base text-primary">
-                                {astroGlyphForDisplay(s.glyph)}
-                              </span>
-                              <span>{s.label}</span>
-                            </span>
-                          )
-                        }}
-                      </SelectValue>
-                    </SelectTrigger>
-                    <SelectContent
-                      align="start"
-                      className="max-h-[min(320px,50vh)]"
-                    >
-                      {ZODIAC_SIGNS.map((sign) => (
-                        <SelectItem key={sign.id} value={sign.id}>
-                          <span className="flex items-center gap-2">
-                            <span className="font-astro text-base text-primary">
-                              {astroGlyphForDisplay(sign.glyph)}
-                            </span>
-                            {sign.label}
-                          </span>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  />
                 </div>
               )
             })}

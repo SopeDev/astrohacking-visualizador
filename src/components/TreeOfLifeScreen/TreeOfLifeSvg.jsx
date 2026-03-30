@@ -2,10 +2,13 @@
 
 import { useCallback } from 'react'
 import {
+  LUNAR_NORTH_NODE_GLYPH,
+  LUNAR_SOUTH_NODE_GLYPH,
   NATURAL_PLANETS,
   SEPHIROT,
   SEPHIROT_BY_ID,
   TREE_EDGES,
+  getOppositeSignId,
   getSignById,
 } from '@/data/correspondences'
 import { astroGlyphForDisplay } from '@/lib/astroSymbols'
@@ -157,28 +160,16 @@ function SephiraLabels({
           </>
         )}
         {hasHeSign && !hasHePlanet && (
-          <>
-            <text
-              x={node.x - GLYPH_HALF_GAP}
-              y={yMid}
-              textAnchor="middle"
-              dominantBaseline="middle"
-              className="fill-muted-foreground select-none"
-              style={heStyleSign}
-            >
-              {sh}
-            </text>
-            <text
-              x={node.x + GLYPH_HALF_GAP}
-              y={yMid}
-              textAnchor="middle"
-              dominantBaseline="middle"
-              className="fill-muted-foreground font-mono tracking-wider select-none"
-              style={{ fontSize: ASC_MONO_PX }}
-            >
-              Asc
-            </text>
-          </>
+          <text
+            x={node.x}
+            y={yMid}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            className="fill-muted-foreground select-none"
+            style={heStyleSign}
+          >
+            {sh}
+          </text>
         )}
         {!hasHeSign && hasHePlanet && (
           <text
@@ -198,7 +189,7 @@ function SephiraLabels({
 
   if (viewMode === TREE_VIEW_INTELLIGENCE) {
     const signIntel = sign?.intelligence ?? '—'
-    const planetIntel = planet?.intelligence ?? (node.ascendantNode ? 'Ascendente' : '—')
+    const planetIntel = planet?.intelligence ?? '—'
     const foW = R * 2
     const foH = R * 2
     return (
@@ -214,17 +205,169 @@ function SephiraLabels({
           xmlns="http://www.w3.org/1999/xhtml"
           className="text-foreground box-border flex h-full flex-col items-stretch justify-center gap-0.5 px-0.5 text-center"
         >
-          <span
-            className="text-muted-foreground line-clamp-3 text-[7px] leading-[1.08]"
-            title={signIntel}
-          >
-            {signIntel}
-          </span>
-          <span className="text-primary line-clamp-3 text-[7px] leading-[1.08]" title={planetIntel}>
-            {planetIntel}
-          </span>
+          {node.ascendantNode ? (
+            <span
+              className="text-muted-foreground line-clamp-6 text-[8px] leading-[1.08]"
+              title={signIntel}
+            >
+              {signIntel}
+            </span>
+          ) : (
+            <>
+              <span
+                className="text-muted-foreground line-clamp-3 text-[8px] leading-[1.08]"
+                title={signIntel}
+              >
+                {signIntel}
+              </span>
+              <span className="text-primary line-clamp-3 text-[8px] leading-[1.08]" title={planetIntel}>
+                {planetIntel}
+              </span>
+            </>
+          )}
         </div>
       </foreignObject>
+    )
+  }
+
+  return null
+}
+
+/** Nodos lunares entre Jesod y Malkuth, a cada lado del sendero central (x = 200). */
+function LunarNodesBridge({ assignments, viewMode }) {
+  const northId = assignments?.northNode
+  const northSign = getSignById(northId)
+  const southId = northId ? getOppositeSignId(northId) : null
+  const southSign = southId ? getSignById(southId) : null
+  if (!northSign || !southSign) return null
+
+  const yesod = SEPHIROT_BY_ID.yesod
+  const malkuth = SEPHIROT_BY_ID.malkuth
+  const cx = yesod.x
+  const yMid = (yesod.y + malkuth.y) / 2 + GLYPH_Y_OFFSET
+
+  const LX_NODE = cx - 80
+  const LX_SIGN = cx - 52
+  const RX_SIGN = cx + 52
+  const RX_NODE = cx + 80
+
+  const symSm = { fontFamily: 'var(--font-symbols)', fontSize: '15px' }
+  const symMd = { fontFamily: 'var(--font-symbols)', fontSize: '16px' }
+  const heSm = { fontFamily: 'var(--font-hebrew)', fontSize: '17px' }
+
+  if (viewMode === TREE_VIEW_GLYPHS) {
+    return (
+      <g aria-hidden className="pointer-events-none">
+        <text
+          x={LX_NODE}
+          y={yMid}
+          textAnchor="middle"
+          dominantBaseline="middle"
+          className="fill-muted-foreground font-astro select-none"
+          style={symSm}
+        >
+          {astroGlyphForDisplay(LUNAR_SOUTH_NODE_GLYPH)}
+        </text>
+        <text
+          x={LX_SIGN}
+          y={yMid}
+          textAnchor="middle"
+          dominantBaseline="middle"
+          className="fill-muted-foreground font-astro select-none"
+          style={symMd}
+        >
+          {astroGlyphForDisplay(southSign.glyph)}
+        </text>
+        <text
+          x={RX_SIGN}
+          y={yMid}
+          textAnchor="middle"
+          dominantBaseline="middle"
+          className="fill-primary font-astro select-none"
+          style={symMd}
+        >
+          {astroGlyphForDisplay(northSign.glyph)}
+        </text>
+        <text
+          x={RX_NODE}
+          y={yMid}
+          textAnchor="middle"
+          dominantBaseline="middle"
+          className="fill-primary font-astro select-none"
+          style={symSm}
+        >
+          {astroGlyphForDisplay(LUNAR_NORTH_NODE_GLYPH)}
+        </text>
+      </g>
+    )
+  }
+
+  if (viewMode === TREE_VIEW_HEBREW) {
+    return (
+      <g aria-hidden className="pointer-events-none">
+        <text
+          x={LX_SIGN}
+          y={yMid}
+          textAnchor="middle"
+          dominantBaseline="middle"
+          className="fill-muted-foreground select-none"
+          style={heSm}
+        >
+          {southSign.hebrewChar}
+        </text>
+        <text
+          x={RX_SIGN}
+          y={yMid}
+          textAnchor="middle"
+          dominantBaseline="middle"
+          className="fill-primary select-none"
+          style={heSm}
+        >
+          {northSign.hebrewChar}
+        </text>
+      </g>
+    )
+  }
+
+  if (viewMode === TREE_VIEW_INTELLIGENCE) {
+    const foW = 88
+    const foH = 54
+    const yTop = yMid - foH / 2
+    return (
+      <g aria-hidden className="pointer-events-none">
+        <foreignObject
+          x={cx - 110 - foW / 2}
+          y={yTop}
+          width={foW}
+          height={foH}
+          style={{ pointerEvents: 'none' }}
+        >
+          <div
+            xmlns="http://www.w3.org/1999/xhtml"
+            className="text-muted-foreground flex h-full flex-col justify-center text-right"
+          >
+            <span className="line-clamp-4 text-[8px] leading-tight" title={southSign.intelligence}>
+              {southSign.intelligence}
+            </span>
+          </div>
+        </foreignObject>
+        <foreignObject
+          x={cx + 110 - foW / 2}
+          y={yTop}
+          width={foW}
+          height={foH}
+          style={{ pointerEvents: 'none' }}
+        >
+          <div
+            xmlns="http://www.w3.org/1999/xhtml"
+            className="text-primary flex h-full flex-col justify-center text-left"
+          >
+            <span className="line-clamp-4 text-[8px] leading-tight" title={northSign.intelligence}>
+              {northSign.intelligence}
+            </span>
+          </div>
+        </foreignObject>
+      </g>
     )
   }
 
@@ -286,6 +429,8 @@ export function TreeOfLifeSvg({ assignments, selectedId, onSelect, viewMode }) {
           )
         })}
       </g>
+
+      <LunarNodesBridge assignments={assignments} viewMode={mode} />
 
       {SEPHIROT.map((node) => {
         const selected = selectedId === node.id

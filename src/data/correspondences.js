@@ -201,6 +201,7 @@ export const ASSIGNMENT_ROWS = [
   { key: 'neptune', planetKey: 'neptune' },
   { key: 'pluto', planetKey: 'pluto' },
   { key: 'ascendant', planetKey: null },
+  { key: 'northNode', planetKey: null },
 ]
 
 const signById = Object.fromEntries(ZODIAC_SIGNS.map((s) => [s.id, s]))
@@ -208,6 +209,17 @@ const signById = Object.fromEntries(ZODIAC_SIGNS.map((s) => [s.id, s]))
 export function getSignById(id) {
   return signById[id] ?? null
 }
+
+/** Signo del nodo sur = opuesto al nodo norte en el zodíaco (misma fila de asignación). */
+export function getOppositeSignId(signId) {
+  const idx = ZODIAC_SIGNS.findIndex((s) => s.id === signId)
+  if (idx === -1) return null
+  return ZODIAC_SIGNS[(idx + 6) % 12].id
+}
+
+/** Unicode: nodo ascendente / nodo norte (☊), nodo descendente / nodo sur (☋) */
+export const LUNAR_NORTH_NODE_GLYPH = '\u260A'
+export const LUNAR_SOUTH_NODE_GLYPH = '\u260B'
 
 /**
  * Sephirot on the Tree: layout in viewBox 0 0 400 540 (px-like units).
