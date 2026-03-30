@@ -440,8 +440,8 @@ export function TreeOfLifeSvg({ assignments, selectedId, onSelect, viewMode }) {
         const signGlyph = sign?.glyph
 
         const fillCls = selected
-          ? 'fill-primary/15 stroke-primary'
-          : 'fill-card/90 stroke-border/80 dark:fill-card/80'
+          ? 'fill-card stroke-primary'
+          : 'fill-card stroke-border/80'
         const strokeW = selected ? 2.6 : 1.4
         const dash = node.daat ? '6 5' : undefined
 

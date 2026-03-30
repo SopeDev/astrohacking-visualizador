@@ -57,7 +57,7 @@ export function BreakdownPanel({ sephirot, assignments }) {
           <h2 className="font-heading text-foreground text-xl font-semibold tracking-tight">
             {sephirot.label}
           </h2>
-          {planet && (
+          {/* {planet && (
             <>
               <span className="text-muted-foreground">·</span>
               <span className="font-astro text-primary text-xl">
@@ -65,7 +65,7 @@ export function BreakdownPanel({ sephirot, assignments }) {
               </span>
               <span className="text-muted-foreground text-sm">{planet.label}</span>
             </>
-          )}
+          )} */}
           {sephirot.ascendantNode && (
             <span className="text-muted-foreground text-sm">Ascendente</span>
           )}
@@ -74,6 +74,28 @@ export function BreakdownPanel({ sephirot, assignments }) {
 
       <div className="min-h-0 flex-1 overflow-y-auto px-6 py-6 sm:px-8">
         <div className="space-y-8 pb-8">
+          {planet && (
+            <section className="space-y-4">
+              <h3 className="text-foreground text-sm font-semibold">
+                Planeta natural
+              </h3>
+              <div className="flex items-center gap-3">
+                <span className="font-astro text-primary text-2xl">
+                  {astroGlyphForDisplay(planet.glyph)}
+                </span>
+                <span className="text-foreground font-medium">{planet.label}</span>
+              </div>
+              <HebrewBlock
+                title="Letra sagrada e Inteligencia"
+                hebrewChar={planet.hebrewChar}
+                letterName={planet.letterName}
+                intelligence={planet.intelligence}
+              />
+            </section>
+          )}
+
+          {planet && <Separator className="bg-border/80" />}
+
           <section className="space-y-4">
             <h3 className="text-foreground text-sm font-semibold">
               Signo en esta posición
@@ -100,29 +122,6 @@ export function BreakdownPanel({ sephirot, assignments }) {
             )}
           </section>
 
-          {planet && (
-            <>
-              <Separator className="bg-border/80" />
-              <section className="space-y-4">
-                <h3 className="text-foreground text-sm font-semibold">
-                  Planeta natural
-                </h3>
-                <div className="flex items-center gap-3">
-                  <span className="font-astro text-primary text-2xl">
-                    {astroGlyphForDisplay(planet.glyph)}
-                  </span>
-                  <span className="text-foreground font-medium">{planet.label}</span>
-                </div>
-                <HebrewBlock
-                  title="Letra Sagrada e Inteligencia"
-                  hebrewChar={planet.hebrewChar}
-                  letterName={planet.letterName}
-                  intelligence={planet.intelligence}
-                />
-              </section>
-            </>
-          )}
-
           {sephirot.ascendantNode && (
             <>
               <Separator className="bg-border/80" />
@@ -130,9 +129,7 @@ export function BreakdownPanel({ sephirot, assignments }) {
                 Malkuth enlaza con el{' '}
                 <strong className="text-foreground font-medium">ascendente</strong>
                 : aquí solo aplica la correspondencia del{' '}
-                <strong className="text-foreground font-medium">signo</strong> que
-                elegiste; no hay un planeta &quot;natural&quot; en la tabla para el
-                ascendente.
+                <strong className="text-foreground font-medium">signo</strong>.
               </p>
             </>
           )}

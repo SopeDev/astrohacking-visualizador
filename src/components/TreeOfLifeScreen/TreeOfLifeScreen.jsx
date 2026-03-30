@@ -58,7 +58,7 @@ export function TreeOfLifeScreen() {
         />
         <div className="relative flex min-h-0 flex-1 flex-col">
           <div className="flex min-h-0 flex-1 flex-col px-4 py-6 sm:px-8 sm:py-8">
-            <header className="mb-4 flex shrink-0 flex-col gap-4 sm:mb-5 sm:flex-row sm:items-start sm:justify-between">
+            <header className="mb-4 flex shrink-0 flex-row items-start justify-between gap-4 sm:mb-0">
               <div className="space-y-1">
                 <p className="text-primary/80 text-xs font-medium tracking-[0.2em] uppercase">
                   Astrohacking
@@ -79,7 +79,7 @@ export function TreeOfLifeScreen() {
               </Link>
             </header>
 
-            <div className="flex min-h-[min(280px,38vh)] flex-1 items-center justify-center lg:min-h-0 lg:items-center lg:justify-center lg:pt-2">
+            <div className="flex min-h-[min(280px,38vh)] flex-1 items-center justify-center pt-2 lg:min-h-0 lg:items-center lg:justify-center lg:pt-0">
               <div className="w-full max-w-[520px] lg:max-w-[560px]">
                 <TreeOfLifeSvg
                   assignments={assignments}
@@ -93,7 +93,7 @@ export function TreeOfLifeScreen() {
 
           {/* Cinta tipo Excel: pegada al borde inferior del panel, pestañas planas */}
           <div className="border-border bg-muted/50 mt-auto flex w-full shrink-0 flex-col overflow-hidden border-t">
-            <p className="text-primary/70 px-4 pt-2 pb-1 text-[10px] font-medium tracking-[0.18em] uppercase sm:px-6">
+            <p className="text-primary/70 px-4 pt-2 pb-2 text-[10px] font-medium tracking-[0.18em] uppercase sm:px-6">
               Vista del árbol
             </p>
             <Tabs
