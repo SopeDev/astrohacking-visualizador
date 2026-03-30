@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono, Noto_Sans_Hebrew, Noto_Sans_Symbols_2 } from "next/font/google";
+import { Geist, Geist_Mono, Noto_Rashi_Hebrew, Noto_Sans_Symbols_2 } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -11,7 +11,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const notoHebrew = Noto_Sans_Hebrew({
+const notoHebrew = Noto_Rashi_Hebrew({
   variable: "--font-noto-hebrew",
   subsets: ["hebrew", "latin"],
   weight: ["400", "500", "600"],

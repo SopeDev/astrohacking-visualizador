@@ -103,7 +103,7 @@ export function TreeOfLifeScreen() {
             >
               <TabsList
                 variant="line"
-                className="grid h-11 min-h-11 w-full grid-cols-3 gap-0 rounded-none border-0 border-border/80 border-t bg-muted/55 p-0 shadow-none !h-11"
+                className="grid h-11 min-h-11 w-full grid-cols-3 gap-0 rounded-none border-0 border-x border-primary/35 border-t border-border/80 bg-muted/55 p-0 shadow-none !h-11"
               >
                 <TabsTrigger
                   value={TREE_VIEW_GLYPHS}

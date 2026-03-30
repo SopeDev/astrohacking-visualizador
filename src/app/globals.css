@@ -124,10 +124,10 @@
   font-variant-emoji: text;
 }
 
-/* Pestañas del árbol: estilo cinta plana (tipo Excel), borde inferior alineado */
+/* Pestañas del árbol: separadores verticales + celda activa resaltada (anula line/dark transparent del trigger) */
 @layer components {
   .excel-tab-trigger {
-    @apply relative z-0 box-border flex w-full min-w-0 shrink-0 items-center justify-center border-0 border-r border-border/60 bg-transparent px-2 py-2 text-center text-[11px] font-normal leading-snug whitespace-normal text-muted-foreground shadow-none outline-none;
+    @apply relative z-0 box-border flex w-full min-w-0 shrink-0 items-center justify-center border-0 border-r border-primary/40 bg-transparent px-2 py-2 text-center text-[11px] font-normal leading-snug whitespace-normal text-muted-foreground shadow-none outline-none;
     border-radius: 0 !important;
     height: 2.75rem;
     min-height: 2.75rem;
@@ -148,11 +148,20 @@
 
   .excel-tab-trigger[data-active] {
     z-index: 2;
-    margin-bottom: -1px;
-    @apply box-border border border-border border-b-0 bg-background font-medium text-foreground;
-    border-top-width: 2px;
-    border-top-color: var(--primary);
-    box-shadow: none;
+    color: var(--foreground);
+    font-weight: 600;
+    background-color: var(--background) !important;
+    border-radius: 0 !important;
+    border-top: 2px solid var(--primary);
+    border-bottom: 0;
+    box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--foreground) 10%, transparent);
+  }
+
+  .dark .excel-tab-trigger[data-active] {
+    background-color: var(--card) !important;
+    box-shadow:
+      inset 0 0 0 1px color-mix(in oklch, var(--primary) 30%, transparent),
+      0 0 12px -4px color-mix(in oklch, var(--primary) 55%, transparent);
   }
 }
 
