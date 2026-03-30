@@ -54,7 +54,7 @@ export function TreeOfLifeScreen() {
       <div className="border-border relative flex min-h-[min(52vh,520px)] flex-1 flex-col border-b lg:min-h-dvh lg:min-h-0 lg:border-r lg:border-b-0">
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_75%_55%_at_45%_20%,oklch(0.28_0.07_285/0.28),transparent_58%)]"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_75%_75%_at_45%_45%,oklch(0.28_0.07_285/0.28),transparent_75%)]"
         />
         <div className="relative flex min-h-0 flex-1 flex-col">
           <div className="flex min-h-0 flex-1 flex-col px-4 py-6 sm:px-8 sm:py-8">
@@ -79,7 +79,7 @@ export function TreeOfLifeScreen() {
               </Link>
             </header>
 
-            <div className="flex min-h-[min(280px,38vh)] flex-1 items-center justify-center lg:min-h-0 lg:items-start lg:justify-center lg:pt-2">
+            <div className="flex min-h-[min(280px,38vh)] flex-1 items-center justify-center lg:min-h-0 lg:items-center lg:justify-center lg:pt-2">
               <div className="w-full max-w-[520px] lg:max-w-[560px]">
                 <TreeOfLifeSvg
                   assignments={assignments}
@@ -92,7 +92,7 @@ export function TreeOfLifeScreen() {
           </div>
 
           {/* Cinta tipo Excel: pegada al borde inferior del panel, pestañas planas */}
-          <div className="border-border bg-muted/50 mt-auto flex w-full shrink-0 flex-col border-t">
+          <div className="border-border bg-muted/50 mt-auto flex w-full shrink-0 flex-col overflow-hidden border-t">
             <p className="text-primary/70 px-4 pt-2 pb-1 text-[10px] font-medium tracking-[0.18em] uppercase sm:px-6">
               Vista del árbol
             </p>
@@ -103,7 +103,7 @@ export function TreeOfLifeScreen() {
             >
               <TabsList
                 variant="line"
-                className="grid h-11 min-h-11 w-full grid-cols-3 gap-0 rounded-none border-0 border-x border-primary/35 border-t border-border/80 bg-muted/55 p-0 shadow-none !h-11"
+                className="grid h-11 min-h-11 w-full grid-cols-3 gap-0 rounded-none border-0 border-x border-primary/35 border-t border-border/80 bg-muted/55 p-0 shadow-none !h-11 overflow-hidden"
               >
                 <TabsTrigger
                   value={TREE_VIEW_GLYPHS}
