@@ -214,14 +214,14 @@ function SephiraLabels({
             </span>
           ) : (
             <>
+              <span className="text-primary line-clamp-3 text-[8px] leading-[1.08]" title={planetIntel}>
+                {planetIntel}
+              </span>
               <span
                 className="text-muted-foreground line-clamp-3 text-[8px] leading-[1.08]"
                 title={signIntel}
               >
                 {signIntel}
-              </span>
-              <span className="text-primary line-clamp-3 text-[8px] leading-[1.08]" title={planetIntel}>
-                {planetIntel}
               </span>
             </>
           )}
@@ -251,7 +251,7 @@ function LunarNodesBridge({ assignments, viewMode }) {
   const RX_SIGN = cx + 52
   const RX_NODE = cx + 80
 
-  const symSm = { fontFamily: 'var(--font-symbols)', fontSize: '15px' }
+  const symSm = { fontFamily: 'var(--font-symbols)', fontSize: '18px' }
   const symMd = { fontFamily: 'var(--font-symbols)', fontSize: '16px' }
   const heSm = { fontFamily: 'var(--font-hebrew)', fontSize: '17px' }
 
