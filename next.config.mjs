@@ -1,7 +1,15 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  /* config options here */
-  reactCompiler: true,
-};
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || undefined
 
-export default nextConfig;
+const nextConfig = {
+  output: 'export',
+  reactCompiler: true,
+  images: {
+    unoptimized: true,
+  },
+  ...(basePath
+    ? { basePath, assetPrefix: `${basePath}/` }
+    : {}),
+}
+
+export default nextConfig
