@@ -23,14 +23,14 @@ const VB_H = 540
 /** Radius sefirá — larger so paired glyphs read clearly */
 const R = 36
 /** Horizontal half-gap between sign (left) and planet (right) glyph centers */
-const GLYPH_HALF_GAP = 17
+const GLYPH_HALF_GAP = 14
 /** Vertical offset from node center (viewBox units). Tuned so glyphs read centered in the circle (~45 vs ~50 visual). */
-const GLYPH_Y_OFFSET = 3
-const SIGN_PX = '17px'
-const PLANET_PX = '19px'
-const ASC_MONO_PX = '11px'
-const HEBREW_SIGN_PX = '18px'
-const HEBREW_PLANET_PX = '19px'
+const GLYPH_Y_OFFSET = 2
+const SIGN_PX = '18px'
+const PLANET_PX = '20px'
+const ASC_MONO_PX = '12px'
+const HEBREW_SIGN_PX = '24px'
+const HEBREW_PLANET_PX = '24px'
 
 function edgeParallelSegments(x1, y1, x2, y2, spread = 3) {
   const dx = x2 - x1
@@ -191,7 +191,7 @@ function SephiraLabels({
     const signIntel = sign?.intelligence ?? '—'
     const planetIntel = planet?.intelligence ?? '—'
     const foW = R * 2
-    const foH = R * 2
+    const foH = R * 2.05
     return (
       <foreignObject
         x={node.x - R}
@@ -330,7 +330,7 @@ function LunarNodesBridge({ assignments, viewMode }) {
   }
 
   if (viewMode === TREE_VIEW_INTELLIGENCE) {
-    const foW = 88
+    const foW = 100
     const foH = 54
     const yTop = yMid - foH / 2
     return (
