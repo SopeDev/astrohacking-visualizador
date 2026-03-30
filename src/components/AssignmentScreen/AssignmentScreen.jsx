@@ -31,7 +31,7 @@ function rowMeta(row) {
   return { label: 'Ascendente', symbol: null }
 }
 
-/** Bloque etiqueta + select de signo (reutilizado en tarjetas y pareja Asc / Nodo Norte) */
+/** Etiqueta + select de signo (una tarjeta por fila de asignación) */
 function AssignSignField({ rowKey, label, symbol, value, onValueChange }) {
   return (
     <div className="grid gap-3 sm:grid-cols-[1fr_minmax(11rem,1fr)] sm:items-center sm:gap-4">
@@ -149,42 +149,7 @@ export function AssignmentScreen() {
 
         <form onSubmit={handleSubmit} className="space-y-2">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {ASSIGNMENT_ROWS.map((row, index) => {
-              if (row.key === 'northNode') return null
-
-              if (row.key === 'ascendant') {
-                const northDef = ASSIGNMENT_ROWS[index + 1]
-                const northMeta =
-                  northDef?.key === 'northNode' ? rowMeta(northDef) : null
-                return (
-                  <div
-                    key="ascendant-north-node"
-                    className="rounded-xl border border-border/70 bg-card/40 p-4 shadow-sm backdrop-blur-sm sm:col-span-2 sm:p-5"
-                  >
-                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
-                      <AssignSignField
-                        rowKey="ascendant"
-                        label="Ascendente"
-                        symbol={null}
-                        value={assignments.ascendant}
-                        onValueChange={(signId) => setSign('ascendant', signId)}
-                      />
-                      {northMeta && northDef ? (
-                        <AssignSignField
-                          rowKey="northNode"
-                          label={northMeta.label}
-                          symbol={northMeta.symbol}
-                          value={assignments.northNode}
-                          onValueChange={(signId) =>
-                            setSign('northNode', signId)
-                          }
-                        />
-                      ) : null}
-                    </div>
-                  </div>
-                )
-              }
-
+            {ASSIGNMENT_ROWS.map((row) => {
               const { label, symbol } = rowMeta(row)
               const value = assignments[row.key]
               return (
