@@ -120,7 +120,40 @@
 }
 
 @utility font-astro {
-  font-family: var(--font-symbols);
+  font-family: var(--font-symbols), 'Noto Sans Symbols 2', 'Segoe UI Symbol', sans-serif;
+  font-variant-emoji: text;
+}
+
+/* Pestañas del árbol: estilo cinta plana (tipo Excel), borde inferior alineado */
+@layer components {
+  .excel-tab-trigger {
+    @apply relative z-0 box-border flex w-full min-w-0 shrink-0 items-center justify-center border-0 border-r border-border/60 bg-transparent px-2 py-2 text-center text-[11px] font-normal leading-snug whitespace-normal text-muted-foreground shadow-none outline-none;
+    border-radius: 0 !important;
+    height: 2.75rem;
+    min-height: 2.75rem;
+    max-height: none;
+  }
+
+  .excel-tab-trigger:last-child {
+    border-right-width: 0;
+  }
+
+  .excel-tab-trigger::after {
+    display: none !important;
+  }
+
+  .excel-tab-trigger:hover {
+    @apply text-foreground;
+  }
+
+  .excel-tab-trigger[data-active] {
+    z-index: 2;
+    margin-bottom: -1px;
+    @apply box-border border border-border border-b-0 bg-background font-medium text-foreground;
+    border-top-width: 2px;
+    border-top-color: var(--primary);
+    box-shadow: none;
+  }
 }
 
 @layer base {

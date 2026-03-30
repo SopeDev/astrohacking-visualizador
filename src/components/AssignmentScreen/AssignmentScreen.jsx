@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { useMemo, useState } from 'react'
 import {
   ASSIGNMENT_ROWS,
@@ -8,6 +9,7 @@ import {
   ZODIAC_SIGNS,
   getSignById,
 } from '@/data/correspondences'
+import { astroGlyphForDisplay } from '@/lib/astroSymbols'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import {
@@ -27,6 +29,7 @@ function rowMeta(row) {
 }
 
 export function AssignmentScreen() {
+  const router = useRouter()
   const initial = useMemo(() => {
     const m = {}
     for (const row of ASSIGNMENT_ROWS) {
@@ -36,13 +39,11 @@ export function AssignmentScreen() {
   }, [])
 
   const [assignments, setAssignments] = useState(initial)
-  const [saved, setSaved] = useState(false)
 
   const allChosen = ASSIGNMENT_ROWS.every((row) => assignments[row.key] != null)
 
   const setSign = (rowKey, signId) => {
     setAssignments((prev) => ({ ...prev, [rowKey]: signId }))
-    setSaved(false)
   }
 
   const handleSubmit = (e) => {
@@ -56,7 +57,7 @@ export function AssignmentScreen() {
     } catch {
       /* ignore quota / private mode */
     }
-    setSaved(true)
+    router.push('/arbol')
   }
 
   return (
@@ -95,7 +96,7 @@ export function AssignmentScreen() {
                         className="font-astro text-xl leading-none text-primary tabular-nums"
                         aria-hidden
                       >
-                        {symbol}
+                        {astroGlyphForDisplay(symbol)}
                       </span>
                     ) : (
                       <span className="font-mono text-muted-foreground text-xs tracking-wide">
@@ -126,7 +127,7 @@ export function AssignmentScreen() {
                           return (
                             <span className="flex items-center gap-2">
                               <span className="font-astro text-base text-primary">
-                                {s.glyph}
+                                {astroGlyphForDisplay(s.glyph)}
                               </span>
                               <span>{s.label}</span>
                             </span>
@@ -142,7 +143,7 @@ export function AssignmentScreen() {
                         <SelectItem key={sign.id} value={sign.id}>
                           <span className="flex items-center gap-2">
                             <span className="font-astro text-base text-primary">
-                              {sign.glyph}
+                              {astroGlyphForDisplay(sign.glyph)}
                             </span>
                             {sign.label}
                           </span>
@@ -164,12 +165,6 @@ export function AssignmentScreen() {
             >
               Continuar
             </Button>
-            {saved && (
-              <p className="text-muted-foreground text-center text-sm sm:text-left">
-                Asignaciones guardadas en esta sesión. La vista del árbol llegará
-                en el siguiente paso.
-              </p>
-            )}
           </div>
         </form>
       </div>

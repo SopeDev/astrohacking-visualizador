@@ -208,3 +208,127 @@ const signById = Object.fromEntries(ZODIAC_SIGNS.map((s) => [s.id, s]))
 export function getSignById(id) {
   return signById[id] ?? null
 }
+
+/**
+ * Sephirot on the Tree: layout in viewBox 0 0 400 540 (px-like units).
+ * assignmentKey matches keys saved from screen one (sun, moon, … ascendant).
+ */
+export const SEPHIROT = [
+  {
+    id: 'kether',
+    label: 'Kéter',
+    x: 200,
+    y: 42,
+    planetKey: 'uranus',
+    assignmentKey: 'uranus',
+  },
+  {
+    id: 'chokmah',
+    label: 'Jojmá',
+    x: 312,
+    y: 118,
+    planetKey: 'neptune',
+    assignmentKey: 'neptune',
+  },
+  {
+    id: 'binah',
+    label: 'Biná',
+    x: 88,
+    y: 118,
+    planetKey: 'saturn',
+    assignmentKey: 'saturn',
+  },
+  {
+    id: 'daat',
+    label: 'Daat',
+    x: 200,
+    y: 138,
+    planetKey: 'pluto',
+    assignmentKey: 'pluto',
+    daat: true,
+  },
+  {
+    id: 'chesed',
+    label: 'Jésed',
+    x: 312,
+    y: 228,
+    planetKey: 'jupiter',
+    assignmentKey: 'jupiter',
+  },
+  {
+    id: 'geburah',
+    label: 'Geburá',
+    x: 88,
+    y: 228,
+    planetKey: 'mars',
+    assignmentKey: 'mars',
+  },
+  {
+    id: 'tiphareth',
+    label: 'Tiferet',
+    x: 200,
+    y: 268,
+    planetKey: 'sun',
+    assignmentKey: 'sun',
+  },
+  {
+    id: 'netzach',
+    label: 'Netsaj',
+    x: 312,
+    y: 358,
+    planetKey: 'venus',
+    assignmentKey: 'venus',
+  },
+  {
+    id: 'hod',
+    label: 'Hod',
+    x: 88,
+    y: 358,
+    planetKey: 'mercury',
+    assignmentKey: 'mercury',
+  },
+  {
+    id: 'yesod',
+    label: 'Jesod',
+    x: 200,
+    y: 398,
+    planetKey: 'moon',
+    assignmentKey: 'moon',
+  },
+  {
+    id: 'malkuth',
+    label: 'Malkuth',
+    x: 200,
+    y: 498,
+    planetKey: null,
+    assignmentKey: 'ascendant',
+    ascendantNode: true,
+  },
+]
+
+export const SEPHIROT_BY_ID = Object.fromEntries(
+  SEPHIROT.map((s) => [s.id, s]),
+)
+
+/** Undirected paths (each pair drawn once) */
+export const TREE_EDGES = [
+  ['kether', 'chokmah'],
+  ['kether', 'binah'],
+  ['kether', 'daat'],
+  ['chokmah', 'binah'],
+  ['chokmah', 'chesed'],
+  ['binah', 'geburah'],
+  ['chesed', 'geburah'],
+  ['daat', 'tiphareth'],
+  ['chesed', 'tiphareth'],
+  ['geburah', 'tiphareth'],
+  ['chesed', 'netzach'],
+  ['geburah', 'hod'],
+  ['tiphareth', 'netzach'],
+  ['tiphareth', 'hod'],
+  ['netzach', 'hod'],
+  ['tiphareth', 'yesod'],
+  ['netzach', 'yesod'],
+  ['hod', 'yesod'],
+  ['yesod', 'malkuth'],
+]
