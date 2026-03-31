@@ -70,20 +70,20 @@ function SephiraLabels({
               y={yMid}
               textAnchor="middle"
               dominantBaseline="middle"
-              className="fill-muted-foreground font-astro select-none"
-              style={symStyleSign}
+              className="fill-primary font-astro select-none"
+              style={symStylePlanet}
             >
-              {astroGlyphForDisplay(signGlyph)}
+              {astroGlyphForDisplay(planetGlyph)}
             </text>
             <text
               x={node.x + GLYPH_HALF_GAP}
               y={yMid}
               textAnchor="middle"
               dominantBaseline="middle"
-              className="fill-primary font-astro select-none"
-              style={symStylePlanet}
+              className="fill-muted-foreground font-astro select-none"
+              style={symStyleSign}
             >
-              {astroGlyphForDisplay(planetGlyph)}
+              {astroGlyphForDisplay(signGlyph)}
             </text>
           </>
         )}
@@ -94,20 +94,20 @@ function SephiraLabels({
               y={yMid}
               textAnchor="middle"
               dominantBaseline="middle"
-              className="fill-muted-foreground font-astro select-none"
-              style={symStyleSign}
+              className="fill-primary font-mono tracking-wider select-none"
+              style={{ fontSize: ASC_MONO_PX }}
             >
-              {astroGlyphForDisplay(signGlyph)}
+              Asc
             </text>
             <text
               x={node.x + GLYPH_HALF_GAP}
               y={yMid}
               textAnchor="middle"
               dominantBaseline="middle"
-              className="fill-muted-foreground font-mono tracking-wider select-none"
-              style={{ fontSize: ASC_MONO_PX }}
+              className="fill-muted-foreground font-astro select-none"
+              style={symStyleSign}
             >
-              Asc
+              {astroGlyphForDisplay(signGlyph)}
             </text>
           </>
         )}
@@ -138,7 +138,7 @@ function SephiraLabels({
         {hasHeSign && hasHePlanet && (
           <>
             <text
-              x={node.x - GLYPH_HALF_GAP}
+              x={node.x + GLYPH_HALF_GAP}
               y={yMid}
               textAnchor="middle"
               dominantBaseline="middle"
@@ -148,7 +148,7 @@ function SephiraLabels({
               {sh}
             </text>
             <text
-              x={node.x + GLYPH_HALF_GAP}
+              x={node.x - GLYPH_HALF_GAP}
               y={yMid}
               textAnchor="middle"
               dominantBaseline="middle"
@@ -263,7 +263,7 @@ function LunarNodesBridge({ assignments, viewMode }) {
           y={yMid}
           textAnchor="middle"
           dominantBaseline="middle"
-          className="fill-muted-foreground font-astro select-none"
+          className="fill-primary font-astro select-none"
           style={symSm}
         >
           {astroGlyphForDisplay(LUNAR_SOUTH_NODE_GLYPH)}
@@ -283,7 +283,7 @@ function LunarNodesBridge({ assignments, viewMode }) {
           y={yMid}
           textAnchor="middle"
           dominantBaseline="middle"
-          className="fill-primary font-astro select-none"
+          className="fill-muted-foreground font-astro select-none"
           style={symMd}
         >
           {astroGlyphForDisplay(northSign.glyph)}
@@ -320,7 +320,7 @@ function LunarNodesBridge({ assignments, viewMode }) {
           y={yMid}
           textAnchor="middle"
           dominantBaseline="middle"
-          className="fill-primary select-none"
+          className="fill-muted-foreground select-none"
           style={heSm}
         >
           {northSign.hebrewChar}
@@ -360,7 +360,7 @@ function LunarNodesBridge({ assignments, viewMode }) {
         >
           <div
             xmlns="http://www.w3.org/1999/xhtml"
-            className="text-primary flex h-full flex-col justify-center text-left"
+            className="text-muted-foreground flex h-full flex-col justify-center text-left"
           >
             <span className="line-clamp-4 text-[8px] leading-tight" title={northSign.intelligence}>
               {northSign.intelligence}
