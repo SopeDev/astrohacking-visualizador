@@ -124,8 +124,41 @@
   font-variant-emoji: text;
 }
 
-/* Pestañas del árbol: separadores verticales + celda activa resaltada (anula line/dark transparent del trigger) */
+/* Paneles con scroll: barra fina, tono primary suave (aside + árbol en alturas bajas) */
 @layer components {
+  .breakdown-panel-scroll,
+  .tree-panel-scroll {
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklch, var(--primary) 42%, transparent) transparent;
+  }
+
+  .breakdown-panel-scroll::-webkit-scrollbar,
+  .tree-panel-scroll::-webkit-scrollbar {
+    width: 7px;
+  }
+
+  .breakdown-panel-scroll::-webkit-scrollbar-track,
+  .tree-panel-scroll::-webkit-scrollbar-track {
+    background: transparent;
+    margin-block: 6px;
+  }
+
+  .breakdown-panel-scroll::-webkit-scrollbar-thumb,
+  .tree-panel-scroll::-webkit-scrollbar-thumb {
+    border-radius: 9999px;
+    background: color-mix(in oklch, var(--primary) 38%, var(--muted-foreground) 12%);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  .breakdown-panel-scroll::-webkit-scrollbar-thumb:hover,
+  .tree-panel-scroll::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in oklch, var(--primary) 55%, var(--muted-foreground) 8%);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
   .excel-tab-trigger {
     @apply relative z-0 box-border flex w-full min-w-0 shrink-0 items-center justify-center border-0 border-r border-primary/40 bg-transparent px-2 py-2 text-center text-[11px] font-normal leading-snug whitespace-normal text-muted-foreground shadow-none outline-none;
     border-radius: 0 !important;
@@ -133,6 +166,12 @@
     min-height: 2.75rem;
     max-height: none;
   }
+
+  /* Keep visible dividers with actual borders (no inset shadows) */
+  /* .excel-tab-trigger + .excel-tab-trigger {
+    border-left: 1px solid color-mix(in oklch, var(--primary) 38%, transparent);
+    border-right: 1px solid color-mix(in oklch, var(--primary) 38%, transparent);
+  } */
 
   .excel-tab-trigger:last-child {
     border-right-width: 0;
@@ -156,15 +195,14 @@
     font-weight: 600;
     background-color: var(--background) !important;
     border-radius: 0 !important;
-    border-top: 2px solid var(--primary);
+    border-top: 0px solid var(--primary);
     border-bottom: 0;
-    box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--foreground) 10%, transparent);
+    box-shadow: none;
   }
 
   .dark .excel-tab-trigger[data-active] {
     background-color: var(--card) !important;
-    /* Inset only — outer glow was painting past the strip and growing page scroll ~1–2px */
-    box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--primary) 30%, transparent);
+    box-shadow: none;
   }
 }
 

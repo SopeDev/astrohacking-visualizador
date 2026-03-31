@@ -49,15 +49,15 @@ export function TreeOfLifeScreen() {
   const selected = selectedId ? SEPHIROT_BY_ID[selectedId] : null
 
   return (
-    <div className="bg-background text-foreground flex min-h-dvh flex-col lg:min-h-dvh lg:flex-row">
+    <div className="bg-background text-foreground flex min-h-dvh flex-col lg:h-dvh lg:max-h-dvh lg:min-h-0 lg:flex-row lg:overflow-hidden">
       {/* Árbol — columna principal */}
-      <div className="border-border relative flex min-h-[min(52vh,520px)] flex-1 flex-col border-b lg:min-h-dvh lg:min-h-0 lg:border-r lg:border-b-0">
+      <div className="border-border relative flex min-h-[min(52vh,520px)] flex-1 flex-col border-b lg:min-h-0 lg:overflow-hidden lg:border-r lg:border-b-0">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_75%_75%_at_45%_45%,oklch(0.28_0.07_285/0.28),transparent_75%)]"
         />
         <div className="relative flex min-h-0 flex-1 flex-col">
-          <div className="flex min-h-0 flex-1 flex-col px-4 py-6 sm:px-8 sm:py-8">
+          <div className="tree-panel-scroll flex min-h-0 flex-1 flex-col px-4 py-6 overflow-x-hidden overflow-y-auto overscroll-y-contain sm:px-8 sm:py-8">
             <header className="mb-4 flex shrink-0 flex-row items-start justify-between gap-4 sm:mb-0">
               <div className="space-y-1">
                 <p className="text-primary/80 text-xs font-medium tracking-[0.2em] uppercase">
@@ -79,14 +79,17 @@ export function TreeOfLifeScreen() {
               </Link>
             </header>
 
-            <div className="flex min-h-[min(280px,38vh)] flex-1 items-center justify-center pt-2 lg:min-h-0 lg:items-center lg:justify-center lg:pt-0">
-              <div className="w-full max-w-[520px] lg:max-w-[560px]">
-                <TreeOfLifeSvg
-                  assignments={assignments}
-                  selectedId={selectedId}
-                  viewMode={treeViewMode}
-                  onSelect={setSelectedId}
-                />
+            {/* Scroll when viewport is short (lg h-dvh) so the diagram is never clipped behind the tab bar */}
+            <div className="min-h-[min(240px,36vh)] flex-1 lg:min-h-0">
+              <div className="flex min-h-full items-center justify-center pt-2 pb-2 lg:pt-0 lg:pb-6">
+                <div className="w-full max-w-[520px] shrink-0 lg:max-w-[560px]">
+                  <TreeOfLifeSvg
+                    assignments={assignments}
+                    selectedId={selectedId}
+                    viewMode={treeViewMode}
+                    onSelect={setSelectedId}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -103,7 +106,7 @@ export function TreeOfLifeScreen() {
             >
               <TabsList
                 variant="line"
-                className="grid h-11 min-h-11 w-full grid-cols-3 gap-0 rounded-none border-0 border-x border-primary/35 border-t border-border/80 bg-muted/55 p-0 shadow-none !h-11 overflow-hidden"
+                className="grid h-11 min-h-11 w-full grid-cols-3 gap-0 rounded-none border-0 border-primary/35 border-t border-border/80 bg-muted/55 p-0 shadow-none !h-11 overflow-hidden"
               >
                 <TabsTrigger
                   value={TREE_VIEW_GLYPHS}
@@ -131,7 +134,7 @@ export function TreeOfLifeScreen() {
 
       {/* Sidebar — panel de datos */}
       <aside
-        className="bg-muted/35 border-border flex w-full shrink-0 flex-col border-t lg:w-[min(420px,42vw)] xl:w-[440px] lg:min-h-dvh lg:border-t-0 lg:border-l"
+        className="bg-muted/35 border-border flex w-full min-h-0 shrink-0 flex-col overflow-hidden border-t lg:h-full lg:w-[min(420px,42vw)] xl:w-[440px] lg:flex-none lg:border-t-0 lg:border-l"
         aria-label="Panel de correspondencias"
       >
         <BreakdownPanel sephirot={selected} assignments={assignments} />

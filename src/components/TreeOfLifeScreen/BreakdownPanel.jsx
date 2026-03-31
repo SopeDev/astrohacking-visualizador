@@ -1,6 +1,7 @@
 'use client'
 
 import { NATURAL_PLANETS, getSignById } from '@/data/correspondences'
+import { getSephirotInterpretation } from '@/data/sephirotInterpretations'
 import { astroGlyphForDisplay } from '@/lib/astroSymbols'
 import { Separator } from '@/components/ui/separator'
 
@@ -46,6 +47,10 @@ export function BreakdownPanel({ sephirot, assignments }) {
   const signId = assignments?.[sephirot.assignmentKey]
   const sign = getSignById(signId)
   const planet = sephirot.planetKey ? NATURAL_PLANETS[sephirot.planetKey] : null
+  const interpretation =
+    signId && !sephirot.ascendantNode
+      ? getSephirotInterpretation(sephirot.id, sephirot.planetKey ?? null, signId)
+      : null
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
@@ -72,7 +77,7 @@ export function BreakdownPanel({ sephirot, assignments }) {
         </div>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto px-6 py-6 sm:px-8">
+      <div className="breakdown-panel-scroll min-h-0 flex-1 overflow-y-auto px-6 py-6 sm:px-8">
         <div className="space-y-8 pb-8">
           {planet && (
             <section className="space-y-4">
@@ -121,6 +126,30 @@ export function BreakdownPanel({ sephirot, assignments }) {
               </p>
             )}
           </section>
+
+          {/* {interpretation && (
+            <>
+              <Separator className="bg-border/80" />
+              <section className="space-y-4">
+                <h3 className="text-foreground text-sm font-semibold">
+                  Interpretación
+                </h3>
+                <div className="text-muted-foreground space-y-4 text-sm leading-relaxed">
+                  {interpretation.paragraphs.map((p, i) => (
+                    <p key={i}>{p}</p>
+                  ))}
+                  <div className="space-y-2 border-border/60 border-l-2 pl-4 pt-4 pb-4">
+                    <p className="text-foreground text-xs font-semibold tracking-wide uppercase">
+                      Clave evolutiva
+                    </p>
+                    {interpretation.evolution.map((line, i) => (
+                      <p key={i}>{line}</p>
+                    ))}
+                  </div>
+                </div>
+              </section>
+            </>
+          )} */}
 
           {sephirot.ascendantNode && (
             <>
