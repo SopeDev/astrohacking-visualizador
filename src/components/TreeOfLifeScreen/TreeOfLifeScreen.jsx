@@ -8,7 +8,7 @@ import {
   isAssignmentsComplete,
   readAssignmentsFromSession,
 } from '@/lib/assignments'
-import { buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button-variants'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
   TREE_VIEW_GLYPHS,

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { AdminProfileForm } from '@/components/AdminProfileForm/AdminProfileForm'
-import { buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button-variants'
 
 export const dynamic = 'force-dynamic'
 

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { listProfiles } from '@/db/queries'
-import { buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button-variants'
 
 export const dynamic = 'force-dynamic'
 

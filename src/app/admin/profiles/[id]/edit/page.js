@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import { getProfileById } from '@/db/queries'
 import { AdminProfileForm } from '@/components/AdminProfileForm/AdminProfileForm'
 import { deleteProfileAction } from '@/app/admin/actions'
-import { buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button-variants'
 
 export const dynamic = 'force-dynamic'
 
