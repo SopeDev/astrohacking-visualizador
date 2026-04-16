@@ -1,0 +1,20 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// Client chart JSON must match ASSIGNMENT_ROWS keys in the app.
+model Profile {
+  id          String   @id @default(uuid()) @db.Uuid
+  label       String
+  notes       String?
+  assignments Json
+  createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("profiles")
+}

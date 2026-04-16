@@ -127,7 +127,7 @@ export function BreakdownPanel({ sephirot, assignments }) {
             )}
           </section>
 
-          {/* {interpretation && (
+          {interpretation && (
             <>
               <Separator className="bg-border/80" />
               <section className="space-y-4">
@@ -149,7 +149,7 @@ export function BreakdownPanel({ sephirot, assignments }) {
                 </div>
               </section>
             </>
-          )} */}
+          )}
 
           {sephirot.ascendantNode && (
             <>

@@ -19,7 +19,19 @@ import {
 import { BreakdownPanel } from './BreakdownPanel'
 import { TreeOfLifeSvg } from './TreeOfLifeSvg'
 
-export function TreeOfLifeScreen() {
+/**
+ * @param {object} [props]
+ * @param {Record<string, string> | null} [props.initialAssignments] — desde servidor (/p/[id]); si existe, no usa sessionStorage
+ * @param {string} [props.backHref]
+ * @param {string} [props.backLabel]
+ * @param {string | null} [props.subtitle] — ej. nombre del perfil
+ */
+export function TreeOfLifeScreen({
+  initialAssignments = null,
+  backHref = '/',
+  backLabel = 'Volver a asignación',
+  subtitle = null,
+}) {
   const router = useRouter()
   const [assignments, setAssignments] = useState(null)
   const [ready, setReady] = useState(false)
@@ -27,6 +39,18 @@ export function TreeOfLifeScreen() {
   const [treeViewMode, setTreeViewMode] = useState(TREE_VIEW_DEFAULT)
 
   useEffect(() => {
+    if (initialAssignments != null) {
+      if (!isAssignmentsComplete(initialAssignments)) {
+        router.replace('/')
+        return
+      }
+      queueMicrotask(() => {
+        setAssignments(initialAssignments)
+        setReady(true)
+      })
+      return
+    }
+
     const data = readAssignmentsFromSession()
     if (!isAssignmentsComplete(data)) {
       router.replace('/')
@@ -36,7 +60,7 @@ export function TreeOfLifeScreen() {
       setAssignments(data)
       setReady(true)
     })
-  }, [router])
+  }, [router, initialAssignments])
 
   if (!ready || !assignments) {
     return (
@@ -57,7 +81,7 @@ export function TreeOfLifeScreen() {
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_75%_75%_at_45%_45%,oklch(0.28_0.07_285/0.28),transparent_75%)]"
         />
         <div className="relative flex min-h-0 flex-1 flex-col">
-          <div className="tree-panel-scroll flex min-h-0 flex-1 flex-col px-4 py-6 overflow-x-hidden overflow-y-auto overscroll-y-contain sm:px-8 sm:py-8">
+          <div className="tree-panel-scroll flex min-h-0 flex-1 flex-col overflow-x-hidden overflow-y-auto overscroll-y-contain px-4 py-6 sm:px-8 sm:py-8">
             <header className="mb-4 flex shrink-0 flex-row items-start justify-between gap-4 sm:mb-0">
               <div className="space-y-1">
                 <p className="text-primary/80 text-xs font-medium tracking-[0.2em] uppercase">
@@ -66,20 +90,22 @@ export function TreeOfLifeScreen() {
                 <h1 className="font-heading text-2xl font-semibold tracking-tight">
                   Árbol de la vida
                 </h1>
+                {subtitle ? (
+                  <p className="text-muted-foreground text-sm">{subtitle}</p>
+                ) : null}
               </div>
               <Link
-                href="/"
+                href={backHref}
                 className={buttonVariants({
                   variant: 'outline',
                   size: 'default',
                   className: 'shrink-0',
                 })}
               >
-                Volver a asignación
+                {backLabel}
               </Link>
             </header>
 
-            {/* Scroll when viewport is short (lg h-dvh) so the diagram is never clipped behind the tab bar */}
             <div className="min-h-[min(240px,36vh)] flex-1 lg:min-h-0">
               <div className="flex min-h-full items-center justify-center pt-2 pb-2 lg:pt-0 lg:pb-6">
                 <div className="w-full max-w-[520px] shrink-0 lg:max-w-[560px]">
@@ -94,7 +120,6 @@ export function TreeOfLifeScreen() {
             </div>
           </div>
 
-          {/* Cinta tipo Excel: pegada al borde inferior del panel, pestañas planas */}
           <div className="border-border bg-muted/50 mt-auto flex w-full shrink-0 flex-col overflow-hidden border-t">
             <p className="text-primary/70 px-4 pt-2 pb-2 text-[10px] font-medium tracking-[0.18em] uppercase sm:px-6">
               Vista del árbol
@@ -106,7 +131,7 @@ export function TreeOfLifeScreen() {
             >
               <TabsList
                 variant="line"
-                className="grid h-11 min-h-11 w-full grid-cols-3 gap-0 rounded-none border-0 border-primary/35 border-t border-border/80 bg-muted/55 p-0 shadow-none !h-11 overflow-hidden"
+                className="grid h-11 min-h-11 w-full grid-cols-3 gap-0 rounded-none border-0 border-x border-primary/35 border-t border-border/80 bg-muted/55 p-0 shadow-none !h-11 overflow-hidden"
               >
                 <TabsTrigger
                   value={TREE_VIEW_GLYPHS}
@@ -132,7 +157,6 @@ export function TreeOfLifeScreen() {
         </div>
       </div>
 
-      {/* Sidebar — panel de datos */}
       <aside
         className="bg-muted/35 border-border flex w-full min-h-0 shrink-0 flex-col overflow-hidden border-t lg:h-full lg:w-[min(420px,42vw)] xl:w-[440px] lg:flex-none lg:border-t-0 lg:border-l"
         aria-label="Panel de correspondencias"

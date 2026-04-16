@@ -2,7 +2,6 @@
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || undefined
 
 const nextConfig = {
-  output: 'export',
   reactCompiler: true,
   images: {
     unoptimized: true,
