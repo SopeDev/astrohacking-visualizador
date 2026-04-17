@@ -95,8 +95,8 @@ export default async function AdminPage() {
       )}
 
       <p className="text-muted-foreground mt-10 text-xs">
-        <Link href="/" className="text-primary underline-offset-4 hover:underline">
-          Volver a la asignación pública
+        <Link href="/admin" className="text-primary underline-offset-4 hover:underline">
+          Ir al inicio de admin
         </Link>
       </p>
     </div>

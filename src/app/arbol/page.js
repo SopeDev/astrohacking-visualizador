@@ -1,5 +1,5 @@
-import { TreeOfLifeScreen } from '@/components/TreeOfLifeScreen/TreeOfLifeScreen'
+import { redirect } from 'next/navigation'
 
 export default function ArbolPage() {
-  return <TreeOfLifeScreen />
+  redirect('/admin')
 }

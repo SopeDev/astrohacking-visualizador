@@ -40,13 +40,14 @@ function checkAdminBasicAuth(request) {
 export async function middleware(request) {
   const { pathname } = request.nextUrl
   const { supabase, response } = createSupabaseMiddlewareClient(request)
+  const isPublicShareRoute = pathname === '/p' || pathname.startsWith('/p/')
 
   // Refreshes auth cookies/session when Supabase auth is used.
   if (supabase) {
     await supabase.auth.getUser()
   }
 
-  if (pathname.startsWith('/admin')) {
+  if (!isPublicShareRoute) {
     const auth = checkAdminBasicAuth(request)
     if (!auth.ok) {
       if (auth.status === 503) {

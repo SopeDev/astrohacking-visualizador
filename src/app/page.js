@@ -1,5 +1,5 @@
-import { AssignmentScreen } from '@/components/AssignmentScreen/AssignmentScreen'
+import { redirect } from 'next/navigation'
 
 export default function Home() {
-  return <AssignmentScreen />
+  redirect('/admin')
 }
