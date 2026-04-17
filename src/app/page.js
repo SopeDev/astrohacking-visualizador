@@ -22,7 +22,7 @@ export default async function Home() {
   }
 
   return (
-    <div className="bg-background text-foreground mx-auto max-w-3xl min-w-lg px-4 py-10 sm:px-6">
+    <div className="bg-background text-foreground mx-auto max-w-3xl md:min-w-lg px-4 py-10 sm:px-6">
       <div className="mb-8">
         <div>
           <p className="text-primary/80 text-xs font-medium tracking-[0.2em] uppercase">

@@ -49,7 +49,7 @@ export default async function EditProfilePage({ params, searchParams }) {
         <p className="text-primary mb-4 text-sm">Cambios guardados.</p>
       ) : null}
 
-      <div className="border-border bg-muted/30 mb-8 rounded-lg border px-4 py-3 text-sm flex justify-between items-center">
+      <div className="border-border bg-muted/30 mb-8 rounded-lg border px-4 py-3 text-sm md:flex justify-between items-center">
         <p className="text-muted-foreground font-medium">Enlace para el cliente</p>
         <CopyShareLink url={sharePath} />
       </div>
