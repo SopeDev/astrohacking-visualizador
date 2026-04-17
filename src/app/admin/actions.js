@@ -47,8 +47,8 @@ export async function createProfileAction(prevState, formData) {
     return { ok: false, error: 'No se pudo crear el perfil. ¿DATABASE_URL correcto?' }
   }
 
-  revalidatePath('/admin')
-  redirect(`/admin/profiles/${created.id}/edit?created=1`)
+  revalidatePath('/')
+  redirect(`/profiles/${created.id}/edit?created=1`)
 }
 
 export async function updateProfileAction(prevState, formData) {
@@ -85,9 +85,9 @@ export async function updateProfileAction(prevState, formData) {
     return { ok: false, error: 'No se pudo actualizar el perfil.' }
   }
 
-  revalidatePath('/admin')
+  revalidatePath('/')
   revalidatePath(`/p/${id}`)
-  redirect(`/admin/profiles/${id}/edit?saved=1`)
+  redirect(`/profiles/${id}/edit?saved=1`)
 }
 
 export async function deleteProfileAction(formData) {
@@ -96,8 +96,8 @@ export async function deleteProfileAction(formData) {
   try {
     await prisma.profile.delete({ where: { id } })
   } catch {
-    redirect('/admin')
+    redirect('/')
   }
-  revalidatePath('/admin')
-  redirect('/admin')
+  revalidatePath('/')
+  redirect('/')
 }

@@ -75,7 +75,7 @@ export function AssignSignField({ rowKey, label, symbol, value, onValueChange })
             }}
           </SelectValue>
         </SelectTrigger>
-        <SelectContent align="start" className="max-h-[min(320px,50vh)]">
+        <SelectContent align="start">
           {ZODIAC_SIGNS.map((sign) => (
             <SelectItem key={sign.id} value={sign.id}>
               <span className="flex items-center gap-2">

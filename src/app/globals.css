@@ -204,6 +204,116 @@
     background-color: var(--card) !important;
     box-shadow: none;
   }
+
+  .tree-print-document {
+    display: none;
+  }
+}
+
+@media print {
+  @page {
+    margin: 10mm;
+    size: A4 portrait;
+  }
+
+  .tree-screen-shell {
+    display: none !important;
+  }
+
+  .tree-print-document {
+    display: block !important;
+  }
+
+  .tree-print-page {
+    box-sizing: border-box;
+    min-height: auto;
+    break-after: page;
+    page-break-after: always;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    padding: 4mm 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 3mm;
+  }
+
+  .tree-print-page:last-child {
+    break-after: auto;
+    page-break-after: auto;
+  }
+
+  .tree-print-header {
+    width: 100%;
+    max-width: 170mm;
+    text-align: center;
+  }
+
+  .tree-print-kicker {
+    margin: 0 0 2mm;
+    font-size: 9pt;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: color-mix(in oklch, var(--primary) 78%, white);
+  }
+
+  .tree-print-title {
+    margin: 0;
+    font-family: var(--font-heading), sans-serif;
+    font-size: 20pt;
+    line-height: 1.15;
+    color: var(--foreground);
+  }
+
+  .tree-print-subtitle {
+    margin: 2.5mm 0 0;
+    font-size: 11pt;
+    color: var(--muted-foreground);
+  }
+
+  .tree-print-view {
+    margin: 3mm 0 0;
+    font-size: 11pt;
+    font-weight: 600;
+    color: var(--foreground);
+  }
+
+  .tree-print-canvas {
+    width: min(150mm, 100%);
+    margin: 0 auto;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .tree-print-canvas svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .tree-print-document svg {
+    background: white !important;
+  }
+
+  .tree-print-document svg line {
+    stroke: #000 !important;
+    opacity: 1 !important;
+  }
+
+  .tree-print-document svg circle {
+    fill: #fff !important;
+    stroke: #000 !important;
+    filter: none !important;
+  }
+
+  .tree-print-document svg text {
+    fill: #000 !important;
+  }
+
+  .tree-print-document svg foreignObject * {
+    color: #000 !important;
+  }
 }
 
 @layer base {

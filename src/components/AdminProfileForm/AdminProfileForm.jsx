@@ -82,7 +82,7 @@ export function AdminProfileForm({ mode, initial = null }) {
         })}
       </div>
 
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap gap-3 justify-end">
         <Button type="submit" size="lg">
           {mode === 'create' ? 'Crear perfil' : 'Guardar cambios'}
         </Button>

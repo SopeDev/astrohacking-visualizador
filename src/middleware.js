@@ -1,40 +1,12 @@
 import { NextResponse } from 'next/server'
 import { createClient as createSupabaseMiddlewareClient } from '@/utils/supabase/middleware'
+import { checkAdminBasicAuthHeader } from '@/lib/adminBasicAuth'
 
 function unauthorized() {
   return new NextResponse('Authentication required', {
     status: 401,
     headers: { 'WWW-Authenticate': 'Basic realm="Astrohacking Admin"' },
   })
-}
-
-function checkAdminBasicAuth(request) {
-  const user = process.env.ADMIN_BASIC_USER
-  const pass = process.env.ADMIN_BASIC_PASSWORD
-  if (!user || !pass) {
-    return {
-      ok: false,
-      status: 503,
-      message: 'Set ADMIN_BASIC_USER and ADMIN_BASIC_PASSWORD in the environment.',
-    }
-  }
-
-  const header = request.headers.get('authorization')
-  if (!header?.startsWith('Basic ')) {
-    return { ok: false, status: 401 }
-  }
-
-  let decoded
-  try {
-    decoded = atob(header.slice(6))
-  } catch {
-    return { ok: false, status: 401 }
-  }
-
-  const sep = decoded.indexOf(':')
-  const u = decoded.slice(0, sep)
-  const p = decoded.slice(sep + 1)
-  return { ok: u === user && p === pass, status: 401 }
 }
 
 export async function middleware(request) {
@@ -48,7 +20,7 @@ export async function middleware(request) {
   }
 
   if (!isPublicShareRoute) {
-    const auth = checkAdminBasicAuth(request)
+    const auth = checkAdminBasicAuthHeader(request.headers.get('authorization'))
     if (!auth.ok) {
       if (auth.status === 503) {
         return new NextResponse(auth.message, { status: 503 })

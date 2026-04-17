@@ -1,6 +1,8 @@
+import { headers } from 'next/headers'
 import { notFound } from 'next/navigation'
 import { getProfileById } from '@/db/queries'
 import { isAssignmentsComplete } from '@/lib/assignments'
+import { checkAdminBasicAuthHeader } from '@/lib/adminBasicAuth'
 import { TreeOfLifeScreen } from '@/components/TreeOfLifeScreen/TreeOfLifeScreen'
 
 export const dynamic = 'force-dynamic'
@@ -24,11 +26,16 @@ export default async function PublicProfileTreePage({ params }) {
     notFound()
   }
 
+  const requestHeaders = await headers()
+  const auth = checkAdminBasicAuthHeader(requestHeaders.get('authorization'))
+  const canGoHome = auth.ok
+
   return (
     <TreeOfLifeScreen
       initialAssignments={assignments}
       backHref="/"
-      backLabel="Inicio"
+      backLabel="Perfiles"
+      showBackButton={canGoHome}
       subtitle={profile.label}
     />
   )
