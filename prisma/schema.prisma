@@ -3,8 +3,10 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  /// Migrations / introspection (Postgres :5432). With Supabase pooler on `url`, set this to the “Direct connection” string from the dashboard (same database as `url`).
+  directUrl = env("DIRECT_URL")
 }
 
 /// Client chart JSON must match ASSIGNMENT_ROWS keys in the app.

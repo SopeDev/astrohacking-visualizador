@@ -1,4 +1,18 @@
 /**
+ * Prisma often prefixes readable text with a huge "Invalid `prisma...` invocation" block in dev.
+ * @param {string} message
+ */
+function prismaMessageForUi(message) {
+  if (typeof message !== 'string') return String(message)
+  const table = message.match(
+    /The table `[^`]+` does not exist in the current database\./,
+  )
+  if (table) return table[0]
+  const last = message.trim().split('\n').filter(Boolean).pop()
+  return last && last.length < 400 ? last : message.slice(0, 320) + '…'
+}
+
+/**
  * Copy for Prisma / DB failures shown in the UI.
  * Technical detail is hidden on production deploys; shown in dev and on Vercel Preview.
  * @param {unknown} err
@@ -29,7 +43,7 @@ export function describeDbError(err) {
       : 'No se pudo conectar a la base de datos.',
     prismaCode ? `Código Prisma: ${prismaCode}.` : null,
     isMissingSchema
-      ? 'Ejecuta las migraciones contra esta base (p. ej. npx prisma migrate deploy) con la misma instancia de Postgres. Si DATABASE_URL usa pooler, suele hacer falta DIRECT_URL al puerto 5432 para migrate; luego redeploy.'
+      ? 'Ejecuta `npm run db:deploy` contra la misma base que usa la app. Con Supabase, define `DIRECT_URL` (conexión “Direct”, puerto 5432) además del pooler en `DATABASE_URL`; sin eso las migraciones suelen colgarse o no crear tablas en la instancia correcta. Luego reinicia `npm run dev`.'
       : showTechnicalDetail
         ? null
         : 'Revisa DATABASE_URL (pooler, sslmode y parámetros recomendados por Supabase/Prisma) y los registros del despliegue.',
@@ -37,7 +51,9 @@ export function describeDbError(err) {
 
   return {
     summary: summaryParts.join(' '),
-    technicalDetail: showTechnicalDetail ? err.message : null,
+    technicalDetail: showTechnicalDetail
+      ? prismaMessageForUi(err.message)
+      : null,
     prismaCode,
     /** When false, hide pooler/ssl copy (misleading for missing tables). */
     showPoolerHints: !isMissingSchema,
