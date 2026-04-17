@@ -41,15 +41,17 @@ export default async function AdminPage() {
           role="alert"
         >
           <p className="text-destructive font-medium">{dbError.summary}</p>
-          <p className="text-muted-foreground text-xs leading-relaxed">
-            Variable de entorno:{' '}
-            <code className="text-foreground">DATABASE_URL</code>. Con pooler de Supabase,
-            Prisma suele requerir{' '}
-            <code className="text-foreground">?pgbouncer=true</code> (y a menudo{' '}
-            <code className="text-foreground">connection_limit=1</code> en serverless).{' '}
-            <code className="text-foreground">sslmode=require</code> si el panel no lo incluye
-            ya en la cadena.
-          </p>
+          {dbError.showPoolerHints ? (
+            <p className="text-muted-foreground text-xs leading-relaxed">
+              Variable de entorno:{' '}
+              <code className="text-foreground">DATABASE_URL</code>. Con pooler de Supabase,
+              Prisma suele requerir{' '}
+              <code className="text-foreground">?pgbouncer=true</code> (y a menudo{' '}
+              <code className="text-foreground">connection_limit=1</code> en serverless).{' '}
+              <code className="text-foreground">sslmode=require</code> si el panel no lo incluye
+              ya en la cadena.
+            </p>
+          ) : null}
           {dbError.technicalDetail ? (
             <pre className="border-border bg-muted/40 text-foreground max-h-48 overflow-auto rounded-md border p-3 font-mono text-xs whitespace-pre-wrap break-words">
               {dbError.technicalDetail}

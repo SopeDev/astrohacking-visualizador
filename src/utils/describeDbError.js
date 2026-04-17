@@ -14,23 +14,32 @@ export function describeDbError(err) {
         'No se pudo conectar a la base de datos. Comprueba DATABASE_URL (Supabase) en el entorno.',
       technicalDetail: showTechnicalDetail ? String(err) : null,
       prismaCode: null,
+      showPoolerHints: true,
     }
   }
 
   const prismaCode =
     'code' in err && typeof err.code === 'string' ? err.code : null
 
+  const isMissingSchema = prismaCode === 'P2021'
+
   const summaryParts = [
-    'No se pudo conectar a la base de datos.',
+    isMissingSchema
+      ? 'La base de datos responde, pero faltan tablas o el esquema no está aplicado.'
+      : 'No se pudo conectar a la base de datos.',
     prismaCode ? `Código Prisma: ${prismaCode}.` : null,
-    showTechnicalDetail
-      ? null
-      : 'Revisa DATABASE_URL (pooler, sslmode y parámetros recomendados por Supabase/Prisma) y los registros del despliegue.',
+    isMissingSchema
+      ? 'Ejecuta las migraciones contra esta base (p. ej. npx prisma migrate deploy) con la misma instancia de Postgres. Si DATABASE_URL usa pooler, suele hacer falta DIRECT_URL al puerto 5432 para migrate; luego redeploy.'
+      : showTechnicalDetail
+        ? null
+        : 'Revisa DATABASE_URL (pooler, sslmode y parámetros recomendados por Supabase/Prisma) y los registros del despliegue.',
   ].filter(Boolean)
 
   return {
     summary: summaryParts.join(' '),
     technicalDetail: showTechnicalDetail ? err.message : null,
     prismaCode,
+    /** When false, hide pooler/ssl copy (misleading for missing tables). */
+    showPoolerHints: !isMissingSchema,
   }
 }
