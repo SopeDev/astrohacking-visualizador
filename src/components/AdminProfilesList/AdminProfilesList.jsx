@@ -57,7 +57,13 @@ export function AdminProfilesList({ rows, absoluteShare, createHref = '/profiles
               <div className="min-w-0">
                 <p className="text-foreground font-medium">{p.label}</p>
               </div>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <Link
+                  href={`/p/${p.id}`}
+                  className={buttonVariants({ variant: 'secondary', size: 'sm' })}
+                >
+                  Ver árbol
+                </Link>
                 <Link
                   href={`/profiles/${p.id}/edit`}
                   className={buttonVariants({ variant: 'outline', size: 'icon-sm' })}
@@ -66,13 +72,11 @@ export function AdminProfilesList({ rows, absoluteShare, createHref = '/profiles
                 >
                   <Pencil />
                 </Link>
-                <Link
-                  href={`/p/${p.id}`}
-                  className={buttonVariants({ variant: 'secondary', size: 'sm' })}
-                >
-                  Ver árbol
-                </Link>
-                <CopyShareButton url={absoluteShare ? `${absoluteShare}/p/${p.id}` : `/p/${p.id}`} />
+                <CopyShareButton
+                  url={absoluteShare ? `${absoluteShare}/p/${p.id}` : `/p/${p.id}`}
+                  iconTrigger
+                />
+                <span className="bg-border h-6 w-px shrink-0" aria-hidden />
                 <DeleteProfileButton
                   profileId={p.id}
                   profileLabel={p.label}

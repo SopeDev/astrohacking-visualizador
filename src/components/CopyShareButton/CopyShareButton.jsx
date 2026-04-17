@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Link2, Mail, MessageCircle } from 'lucide-react'
+import { Link2, Mail, MessageCircle, Send } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button-variants'
 import { cn } from '@/lib/utils'
 
@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils'
  *   variant?: 'default' | 'outline' | 'secondary' | 'ghost' | 'destructive' | 'link'
  *   size?: 'default' | 'xs' | 'sm' | 'lg' | 'icon' | 'icon-xs' | 'icon-sm' | 'icon-lg'
  *   className?: string
+ *   iconTrigger?: boolean
  * }} props
  */
 export function CopyShareButton({
@@ -18,6 +19,7 @@ export function CopyShareButton({
   variant = 'secondary',
   size = 'sm',
   className = '',
+  iconTrigger = false,
 }) {
   const [copied, setCopied] = useState(false)
   const [open, setOpen] = useState(false)
@@ -40,10 +42,16 @@ export function CopyShareButton({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className={cn(buttonVariants({ variant, size }), className)}
-        title="Opciones para compartir"
+        className={cn(
+          buttonVariants(
+            iconTrigger ? { variant: 'outline', size: 'icon-sm' } : { variant, size },
+          ),
+          className,
+        )}
+        title="Compartir enlace"
+        aria-label="Compartir enlace"
       >
-        Compartir
+        {iconTrigger ? <Send /> : 'Compartir'}
       </button>
 
       {open ? (
