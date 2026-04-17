@@ -1,15 +1,19 @@
 import Link from 'next/link'
 import { listProfiles } from '@/db/queries'
 import { buttonVariants } from '@/components/ui/button-variants'
+import { describeDbError } from '@/utils/describeDbError'
 
 export const dynamic = 'force-dynamic'
 
 export default async function AdminPage() {
   let rows
+  /** @type {ReturnType<typeof describeDbError> | null} */
+  let dbError = null
   try {
     rows = await listProfiles()
-  } catch {
+  } catch (err) {
     rows = null
+    dbError = describeDbError(err)
   }
 
   return (
@@ -31,10 +35,30 @@ export default async function AdminPage() {
         </Link>
       </div>
 
-      {rows === null ? (
+      {rows === null && dbError ? (
+        <div
+          className="border-destructive/30 bg-destructive/5 space-y-3 rounded-lg border p-4 text-sm"
+          role="alert"
+        >
+          <p className="text-destructive font-medium">{dbError.summary}</p>
+          <p className="text-muted-foreground text-xs leading-relaxed">
+            Variable de entorno:{' '}
+            <code className="text-foreground">DATABASE_URL</code>. Con pooler de Supabase,
+            Prisma suele requerir{' '}
+            <code className="text-foreground">?pgbouncer=true</code> (y a menudo{' '}
+            <code className="text-foreground">connection_limit=1</code> en serverless).{' '}
+            <code className="text-foreground">sslmode=require</code> si el panel no lo incluye
+            ya en la cadena.
+          </p>
+          {dbError.technicalDetail ? (
+            <pre className="border-border bg-muted/40 text-foreground max-h-48 overflow-auto rounded-md border p-3 font-mono text-xs whitespace-pre-wrap break-words">
+              {dbError.technicalDetail}
+            </pre>
+          ) : null}
+        </div>
+      ) : rows === null ? (
         <p className="text-destructive text-sm">
-          No se pudo conectar a la base de datos. Comprueba{' '}
-          <code className="text-foreground">DATABASE_URL</code> (Supabase) en el entorno.
+          No se pudo cargar los perfiles. Vuelve a intentar o revisa los registros del servidor.
         </p>
       ) : rows.length === 0 ? (
         <p className="text-muted-foreground text-sm">Aún no hay perfiles.</p>
