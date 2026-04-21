@@ -18,13 +18,13 @@ export function AdminContentPanel({ profiles, absoluteShare, interpretationEntri
         >
           <TabsTrigger
             value="profiles"
-            className="h-11 justify-center border-b border-border/70 px-3 font-medium text-muted-foreground whitespace-nowrap rounded-none transition-colors after:hidden hover:bg-primary/5 hover:text-foreground [transform:none] data-[active]:[transform:none] data-[active]:rounded-none data-[active]:border-primary/50 data-[active]:!bg-primary/20 data-[active]:text-primary lg:justify-start lg:border-l-2 lg:border-b lg:border-l-transparent lg:data-[active]:border-l-primary"
+            className="h-11 w-fit justify-center border-b border-border/70 px-3 font-medium text-muted-foreground whitespace-nowrap rounded-none transition-colors after:hidden hover:bg-primary/5 hover:text-foreground [transform:none] data-[active]:[transform:none] data-[active]:rounded-none data-[active]:border-primary/50 data-[active]:!bg-primary/20 data-[active]:text-primary lg:w-full lg:justify-start lg:border-l-2 lg:border-b lg:border-l-transparent lg:data-[active]:border-l-primary"
           >
             Perfiles clientes
           </TabsTrigger>
           <TabsTrigger
             value="interpretations"
-            className="h-11 justify-center border-b border-border/70 px-3 font-medium text-muted-foreground whitespace-nowrap rounded-none transition-colors after:hidden hover:bg-primary/5 hover:text-foreground [transform:none] data-[active]:[transform:none] data-[active]:rounded-none data-[active]:border-primary/50 data-[active]:!bg-primary/20 data-[active]:text-primary lg:justify-start lg:border-l-2 lg:border-b lg:border-l-transparent lg:data-[active]:border-l-primary"
+            className="h-11 w-fit justify-center border-b border-border/70 px-3 font-medium text-muted-foreground whitespace-nowrap rounded-none transition-colors after:hidden hover:bg-primary/5 hover:text-foreground [transform:none] data-[active]:[transform:none] data-[active]:rounded-none data-[active]:border-primary/50 data-[active]:!bg-primary/20 data-[active]:text-primary lg:w-full lg:justify-start lg:border-l-2 lg:border-b lg:border-l-transparent lg:data-[active]:border-l-primary"
           >
             Combinaciones planetas signos
           </TabsTrigger>
