@@ -75,7 +75,12 @@ export function InterpretationEditorPanel({ entries }) {
     <form action={formAction} className="space-y-6 rounded-xl border border-border p-5">
       <div className="flex flex-wrap items-end gap-4">
         <div className="space-y-2 w-fit">
-          <Label htmlFor="editor-sephirot">Sefirá</Label>
+          <Label
+            htmlFor="editor-sephirot"
+            className="text-primary mb-1 block text-[11px] font-semibold tracking-[0.14em] uppercase"
+          >
+            Sefirá
+          </Label>
           <select
             id="editor-sephirot"
             value={sephirotId}
@@ -92,7 +97,12 @@ export function InterpretationEditorPanel({ entries }) {
           </select>
         </div>
         <div className="space-y-2 w-fit">
-          <Label htmlFor="editor-sign">Signo</Label>
+          <Label
+            htmlFor="editor-sign"
+            className="text-primary mb-1 block text-[11px] font-semibold tracking-[0.14em] uppercase"
+          >
+            Signo
+          </Label>
           <select
             id="editor-sign"
             value={signId}
@@ -120,8 +130,13 @@ export function InterpretationEditorPanel({ entries }) {
       {state?.ok ? <p className="text-primary text-sm">Interpretación guardada.</p> : null}
 
       {SECTION_FIELDS.map((section) => (
-        <div className="space-y-2" key={section.key}>
-          <Label htmlFor={`editor-${section.key}`}>{section.label}</Label>
+        <div className="space-y-2.5" key={section.key}>
+          <Label
+            htmlFor={`editor-${section.key}`}
+            className="text-primary mb-1 block text-xs font-semibold tracking-[0.08em] uppercase"
+          >
+            {section.label}
+          </Label>
           <RichTextEditorField
             value={sections[section.key] ?? ''}
             onChange={(nextValue) =>
