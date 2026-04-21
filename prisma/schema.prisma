@@ -20,3 +20,18 @@ model Profile {
 
   @@map("profiles")
 }
+
+model SephirotInterpretation {
+  id        String   @id @default(uuid()) @db.Uuid
+  sephirotId String  @map("sephirot_id")
+  planetKey String   @map("planet_key")
+  signId    String   @map("sign_id")
+  paragraphs Json
+  evolution Json
+  sections  Json?
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([sephirotId, planetKey, signId], map: "sephirot_interpretations_unique_combo")
+  @@map("sephirot_interpretations")
+}

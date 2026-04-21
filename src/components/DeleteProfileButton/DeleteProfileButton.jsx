@@ -40,7 +40,14 @@ export function DeleteProfileButton({
         aria-label={iconOnly ? `Eliminar perfil ${profileLabel}` : undefined}
         title={`Eliminar perfil ${profileLabel}`}
       >
-        {iconOnly ? <Trash2 /> : triggerLabel}
+        {iconOnly ? (
+          <Trash2 />
+        ) : (
+          <>
+            <Trash2 />
+            <span>{triggerLabel}</span>
+          </>
+        )}
       </button>
 
       {open ? (

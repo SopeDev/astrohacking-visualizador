@@ -27,6 +27,7 @@ import { TreeOfLifeSvg } from './TreeOfLifeSvg'
  * @param {string} [props.backLabel]
  * @param {boolean} [props.showBackButton]
  * @param {string | null} [props.subtitle] — ej. nombre del perfil
+ * @param {Record<string, { sections?: Record<string, string> }>} [props.interpretationsMap]
  */
 export function TreeOfLifeScreen({
   initialAssignments = null,
@@ -34,6 +35,7 @@ export function TreeOfLifeScreen({
   backLabel = 'Volver a asignación',
   showBackButton = true,
   subtitle = null,
+  interpretationsMap = {},
 }) {
   const router = useRouter()
   const [assignments, setAssignments] = useState(null)
@@ -204,7 +206,11 @@ export function TreeOfLifeScreen({
         className="bg-muted/35 border-border flex w-full min-h-0 shrink-0 flex-col overflow-hidden border-t lg:h-full lg:w-[min(420px,42vw)] xl:w-[440px] lg:flex-none lg:border-t-0 lg:border-l"
         aria-label="Panel de correspondencias"
       >
-        <BreakdownPanel sephirot={selected} assignments={assignments} />
+        <BreakdownPanel
+          sephirot={selected}
+          assignments={assignments}
+          interpretationsMap={interpretationsMap}
+        />
       </aside>
       </div>
 

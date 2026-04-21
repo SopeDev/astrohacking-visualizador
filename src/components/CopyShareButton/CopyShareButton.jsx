@@ -51,7 +51,14 @@ export function CopyShareButton({
         title="Compartir enlace"
         aria-label="Compartir enlace"
       >
-        {iconTrigger ? <Send /> : 'Compartir'}
+        {iconTrigger ? (
+          <Send />
+        ) : (
+          <>
+            <Send />
+            <span>Compartir</span>
+          </>
+        )}
       </button>
 
       {open ? (

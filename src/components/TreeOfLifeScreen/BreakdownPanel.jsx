@@ -27,7 +27,116 @@ function HebrewBlock({ title, hebrewChar, letterName, intelligence }) {
   )
 }
 
-export function BreakdownPanel({ sephirot, assignments }) {
+function renderStructuredText(text) {
+  const lines = text.split('\n')
+  const blocks = []
+  let paragraphLines = []
+  let list = null
+
+  const flushParagraph = () => {
+    if (!paragraphLines.length) return
+    blocks.push({ type: 'paragraph', text: paragraphLines.join('\n').trim() })
+    paragraphLines = []
+  }
+
+  const flushList = () => {
+    if (!list || !list.items.length) return
+    blocks.push(list)
+    list = null
+  }
+
+  for (const line of lines) {
+    const raw = line.trimEnd()
+    const trimmed = raw.trim()
+    if (!trimmed) {
+      flushParagraph()
+      flushList()
+      continue
+    }
+
+    const unorderedMatch = trimmed.match(/^[-•]\s+(.*)$/)
+    if (unorderedMatch) {
+      flushParagraph()
+      if (!list || list.type !== 'ul') {
+        flushList()
+        list = { type: 'ul', items: [] }
+      }
+      list.items.push(unorderedMatch[1])
+      continue
+    }
+
+    const orderedMatch = trimmed.match(/^\d+\.\s+(.*)$/)
+    if (orderedMatch) {
+      flushParagraph()
+      if (!list || list.type !== 'ol') {
+        flushList()
+        list = { type: 'ol', items: [] }
+      }
+      list.items.push(orderedMatch[1])
+      continue
+    }
+
+    flushList()
+    paragraphLines.push(trimmed)
+  }
+
+  flushParagraph()
+  flushList()
+
+  return blocks.map((block, index) => {
+    if (block.type === 'ul') {
+      return (
+        <ul key={`ul-${index}`} className="list-disc space-y-1 pl-5">
+          {block.items.map((item, itemIdx) => (
+            <li key={itemIdx}>{item}</li>
+          ))}
+        </ul>
+      )
+    }
+    if (block.type === 'ol') {
+      return (
+        <ol key={`ol-${index}`} className="list-decimal space-y-1 pl-5">
+          {block.items.map((item, itemIdx) => (
+            <li key={itemIdx}>{item}</li>
+          ))}
+        </ol>
+      )
+    }
+    return (
+      <p key={`p-${index}`} className="whitespace-pre-line">
+        {block.text}
+      </p>
+    )
+  })
+}
+
+function hasHtmlMarkup(text) {
+  return /<\/?[a-z][\s\S]*>/i.test(text)
+}
+
+function renderSectionContent(content) {
+  if (hasHtmlMarkup(content)) {
+    return (
+      <div
+        className="space-y-2 [&_p]:mb-2 [&_p:last-child]:mb-0 [&_ul]:list-disc [&_ul]:list-outside [&_ul]:space-y-1 [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:list-outside [&_ol]:space-y-1 [&_ol]:pl-5 [&_li]:list-item [&_li]:leading-relaxed"
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
+    )
+  }
+  return <div className="space-y-2">{renderStructuredText(content)}</div>
+}
+
+const INTERPRETATION_SECTIONS = [
+  { key: 'secretToReveal', label: 'Secreto a revelar' },
+  { key: 'mainReading', label: 'Lectura principal' },
+  { key: 'dailyManifestation', label: 'Cómo se manifiesta en la vida cotidiana' },
+  { key: 'shadowWork', label: 'Cómo se detecta y trabaja la sombra o desalineación' },
+  { key: 'evolutionaryLearning', label: 'Aprendizaje evolutivo' },
+  { key: 'integrationPractice', label: 'Práctica de integración' },
+  { key: 'alignedManifestation', label: 'Cómo se manifiesta en su versión alineada' },
+]
+
+export function BreakdownPanel({ sephirot, assignments, interpretationsMap = {} }) {
   if (!sephirot) {
     return (
       <div className="flex min-h-0 flex-1 flex-col">
@@ -49,7 +158,12 @@ export function BreakdownPanel({ sephirot, assignments }) {
   const planet = sephirot.planetKey ? NATURAL_PLANETS[sephirot.planetKey] : null
   const interpretation =
     signId && !sephirot.ascendantNode
-      ? getSephirotInterpretation(sephirot.id, sephirot.planetKey ?? null, signId)
+      ? getSephirotInterpretation(
+          sephirot.id,
+          sephirot.planetKey ?? null,
+          signId,
+          interpretationsMap,
+        )
       : null
 
   return (
@@ -135,17 +249,18 @@ export function BreakdownPanel({ sephirot, assignments }) {
                   Interpretación
                 </h3>
                 <div className="text-muted-foreground space-y-4 text-sm leading-relaxed">
-                  {interpretation.paragraphs.map((p, i) => (
-                    <p key={i}>{p}</p>
-                  ))}
-                  <div className="space-y-2 border-border/60 border-l-2 pl-4 pt-4 pb-4">
-                    <p className="text-foreground text-xs font-semibold tracking-wide uppercase">
-                      Clave evolutiva
-                    </p>
-                    {interpretation.evolution.map((line, i) => (
-                      <p key={i}>{line}</p>
-                    ))}
-                  </div>
+                  {INTERPRETATION_SECTIONS.map((section) => {
+                    const content = interpretation.sections?.[section.key]?.trim() ?? ''
+                    if (!content) return null
+                    return (
+                      <section key={section.key} className="space-y-2 border-border/50 border-l-2">
+                        <h4 className="text-foreground text-xs font-semibold tracking-wide uppercase">
+                          {section.label}
+                        </h4>
+                        {renderSectionContent(content)}
+                      </section>
+                    )
+                  })}
                 </div>
               </section>
             </>

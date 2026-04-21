@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Pencil } from 'lucide-react'
+import { Eye, Pencil } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { buttonVariants } from '@/components/ui/button-variants'
 import { CopyShareButton } from '@/components/CopyShareButton/CopyShareButton'
@@ -60,31 +60,67 @@ export function AdminProfilesList({ rows, absoluteShare, createHref = '/profiles
               <div className="flex flex-wrap items-center gap-2">
                 <Link
                   href={`/p/${p.id}`}
-                  className={buttonVariants({ variant: 'secondary', size: 'sm' })}
+                  className={buttonVariants({
+                    variant: 'secondary',
+                    size: 'sm',
+                    className: 'hover:bg-secondary/90',
+                  })}
+                  aria-label={`Ver árbol de ${p.label}`}
+                  title="Ver árbol"
                 >
-                  Ver árbol
+                  <Eye />
+                  <span className="hidden sm:inline">Ver árbol</span>
                 </Link>
                 <Link
                   href={`/profiles/${p.id}/edit`}
-                  className={buttonVariants({ variant: 'outline', size: 'icon-sm' })}
+                  className={buttonVariants({
+                    variant: 'outline',
+                    size: 'sm',
+                    className: 'hover:border-primary/35 hover:bg-muted/85',
+                  })}
                   aria-label={`Editar perfil ${p.label}`}
                   title="Editar perfil"
                 >
                   <Pencil />
+                  <span className="hidden sm:inline">Editar</span>
                 </Link>
-                <CopyShareButton
-                  url={absoluteShare ? `${absoluteShare}/p/${p.id}` : `/p/${p.id}`}
-                  iconTrigger
-                />
+                <div className="sm:hidden">
+                  <CopyShareButton
+                    url={absoluteShare ? `${absoluteShare}/p/${p.id}` : `/p/${p.id}`}
+                    iconTrigger
+                  />
+                </div>
+                <div className="hidden sm:block">
+                  <CopyShareButton
+                    url={absoluteShare ? `${absoluteShare}/p/${p.id}` : `/p/${p.id}`}
+                    iconTrigger={false}
+                    variant="outline"
+                    size="sm"
+                    className="hover:border-primary/35 hover:bg-muted/85"
+                  />
+                </div>
                 <span className="bg-border h-6 w-px shrink-0" aria-hidden />
-                <DeleteProfileButton
-                  profileId={p.id}
-                  profileLabel={p.label}
-                  iconOnly
-                  triggerVariant="outline"
-                  triggerSize="icon-sm"
-                  triggerClassName="border-destructive/40 text-destructive hover:border-destructive/60 hover:bg-destructive/10"
-                />
+                <div className="sm:hidden">
+                  <DeleteProfileButton
+                    profileId={p.id}
+                    profileLabel={p.label}
+                    iconOnly
+                    triggerVariant="outline"
+                    triggerSize="icon-sm"
+                    triggerClassName="border-destructive/40 text-destructive hover:border-destructive/60 hover:bg-destructive/10"
+                  />
+                </div>
+                <div className="hidden sm:block">
+                  <DeleteProfileButton
+                    profileId={p.id}
+                    profileLabel={p.label}
+                    iconOnly={false}
+                    triggerLabel="Eliminar"
+                    triggerVariant="outline"
+                    triggerSize="sm"
+                    triggerClassName="border-destructive/40 text-destructive hover:border-destructive/60 hover:bg-destructive/10"
+                  />
+                </div>
               </div>
             </li>
           ))}

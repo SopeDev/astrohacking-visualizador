@@ -12,3 +12,13 @@ export async function getProfileById(id) {
     where: { id },
   })
 }
+
+export async function listSephirotInterpretations() {
+  return prisma.sephirotInterpretation.findMany({
+    orderBy: [
+      { sephirotId: 'asc' },
+      { planetKey: 'asc' },
+      { signId: 'asc' },
+    ],
+  })
+}

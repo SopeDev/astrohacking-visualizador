@@ -9,7 +9,7 @@ function unauthorized() {
   })
 }
 
-export async function middleware(request) {
+export async function proxy(request) {
   const { pathname } = request.nextUrl
   const { supabase, response } = createSupabaseMiddlewareClient(request)
   const isPublicShareRoute = pathname === '/p' || pathname.startsWith('/p/')

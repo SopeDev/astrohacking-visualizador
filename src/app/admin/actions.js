@@ -101,3 +101,80 @@ export async function deleteProfileAction(formData) {
   revalidatePath('/')
   redirect('/')
 }
+
+function linesFromText(raw) {
+  return raw
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean)
+}
+
+function textFromRichHtml(html) {
+  return html
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<\/(p|div|li|h1|h2|h3|h4|h5|h6)>/gi, '\n')
+    .replace(/<[^>]*>/g, '')
+    .replace(/&nbsp;/g, ' ')
+    .trim()
+}
+
+const INTERPRETATION_SECTION_FIELDS = [
+  { key: 'secretToReveal', label: 'Secreto a revelar' },
+  { key: 'mainReading', label: 'Lectura principal' },
+  { key: 'dailyManifestation', label: 'Cómo se manifiesta en la vida cotidiana' },
+  { key: 'shadowWork', label: 'Cómo se detecta y trabaja la sombra o desalineación' },
+  { key: 'evolutionaryLearning', label: 'Aprendizaje evolutivo' },
+  { key: 'integrationPractice', label: 'Práctica de integración' },
+  { key: 'alignedManifestation', label: 'Cómo se manifiesta en su versión alineada' },
+]
+
+export async function upsertInterpretationAction(prevState, formData) {
+  const sephirotId = String(formData.get('sephirotId') ?? '').trim()
+  const planetKey = String(formData.get('planetKey') ?? '').trim()
+  const signId = String(formData.get('signId') ?? '').trim()
+
+  if (!sephirotId || !planetKey || !signId) {
+    return { ok: false, error: 'Faltan datos de la combinación a editar.' }
+  }
+
+  const sections = Object.fromEntries(
+    INTERPRETATION_SECTION_FIELDS.map(({ key }) => [key, String(formData.get(key) ?? '').trim()]),
+  )
+
+  for (const section of INTERPRETATION_SECTION_FIELDS) {
+    if (!textFromRichHtml(sections[section.key])) {
+      return { ok: false, error: `Completa la sección: ${section.label}.` }
+    }
+  }
+
+  try {
+    await prisma.sephirotInterpretation.upsert({
+      where: {
+        sephirotId_planetKey_signId: {
+          sephirotId,
+          planetKey,
+          signId,
+        },
+      },
+      create: {
+        sephirotId,
+        planetKey,
+        signId,
+        paragraphs: linesFromText(textFromRichHtml(sections.mainReading)),
+        evolution: linesFromText(textFromRichHtml(sections.evolutionaryLearning)),
+        sections,
+      },
+      update: {
+        paragraphs: linesFromText(textFromRichHtml(sections.mainReading)),
+        evolution: linesFromText(textFromRichHtml(sections.evolutionaryLearning)),
+        sections,
+      },
+    })
+  } catch {
+    return { ok: false, error: 'No se pudo guardar esta interpretación.' }
+  }
+
+  revalidatePath('/admin')
+  revalidatePath('/p/[id]', 'page')
+  return { ok: true }
+}
