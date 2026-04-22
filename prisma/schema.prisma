@@ -15,10 +15,70 @@ model Profile {
   label       String
   notes       String?
   assignments Json
+  packageCycles ProfilePackageCycle[]
+  appointments  ProfileAppointment[]
   createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt           DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@map("profiles")
+}
+
+enum TherapyPackage {
+  single_session
+  initiation
+  deep_transformation
+  mastery_360
+}
+
+enum PackageCycleStatus {
+  active
+  completed
+  cancelled
+}
+
+enum AppointmentStatus {
+  scheduled
+  completed
+  cancelled
+}
+
+model ProfilePackageCycle {
+  id            String            @id @default(uuid()) @db.Uuid
+  profileId     String            @map("profile_id") @db.Uuid
+  packageType   TherapyPackage    @map("package_type")
+  sessionQuota  Int               @map("session_quota")
+  status        PackageCycleStatus @default(active)
+  purchasedAt   DateTime?         @map("purchased_at") @db.Timestamptz(6)
+  startedAt     DateTime?         @map("started_at") @db.Timestamptz(6)
+  completedAt   DateTime?         @map("completed_at") @db.Timestamptz(6)
+  notes         String?
+  appointments  ProfileAppointment[]
+  profile       Profile           @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  createdAt     DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([profileId, status], map: "profile_package_cycles_profile_status_idx")
+  @@index([profileId, createdAt], map: "profile_package_cycles_profile_created_idx")
+  @@map("profile_package_cycles")
+}
+
+model ProfileAppointment {
+  id          String             @id @default(uuid()) @db.Uuid
+  profileId   String             @map("profile_id") @db.Uuid
+  cycleId     String             @map("cycle_id") @db.Uuid
+  scheduledAt DateTime           @map("scheduled_at") @db.Timestamptz(6)
+  durationMin Int?               @map("duration_min")
+  status      AppointmentStatus  @default(scheduled)
+  notes       String?
+  profile     Profile            @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  cycle       ProfilePackageCycle @relation(fields: [cycleId], references: [id], onDelete: Cascade)
+  createdAt   DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime           @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([scheduledAt, status], map: "profile_appointments_scheduled_status_idx")
+  @@index([profileId, scheduledAt], map: "profile_appointments_profile_scheduled_idx")
+  @@index([cycleId, status], map: "profile_appointments_cycle_status_idx")
+  @@map("profile_appointments")
 }
 
 model SephirotInterpretation {

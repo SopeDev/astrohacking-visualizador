@@ -1,32 +1,55 @@
 'use client'
 
+import { FileUser, Sparkles } from 'lucide-react'
+import { CalendarDays } from 'lucide-react'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { AdminProfilesList } from '@/components/AdminProfilesList/AdminProfilesList'
 import { InterpretationEditorPanel } from '@/components/InterpretationEditorPanel/InterpretationEditorPanel'
+import { AdminClientCalendarPanel } from '@/components/AdminClientCalendarPanel/AdminClientCalendarPanel'
 
-export function AdminContentPanel({ profiles, absoluteShare, interpretationEntries }) {
+export function AdminContentPanel({
+  profiles,
+  absoluteShare,
+  interpretationEntries,
+  calendarAppointments,
+}) {
   return (
     <Tabs
       defaultValue="profiles"
       orientation="vertical"
-      className="flex-col gap-0 lg:flex-row"
+      className="min-h-[calc(100dvh-var(--admin-header-h,7rem))] flex-col gap-0 lg:flex-row"
     >
-      <aside className="border-border bg-muted/20 w-full shrink-0 border-b p-3 sm:p-4 lg:w-72 lg:border-r lg:border-b-0 lg:p-6">
+      <aside className="border-border bg-muted/20 w-full shrink-0 border-b p-0 lg:w-72 lg:border-r lg:border-b-0">
         <TabsList
           variant="line"
           className="bg-transparent !flex-row w-full flex-nowrap gap-0 overflow-x-auto rounded-none p-0 lg:!flex-col lg:overflow-visible"
         >
           <TabsTrigger
             value="profiles"
-            className="h-11 !w-auto !flex-none justify-center border-b border-border/70 px-3 font-medium text-muted-foreground whitespace-nowrap rounded-none transition-colors after:hidden hover:bg-primary/5 hover:text-foreground [transform:none] data-[active]:[transform:none] data-[active]:rounded-none data-[active]:border-primary/50 data-[active]:!bg-primary/20 data-[active]:text-primary lg:!w-full lg:!flex-1 lg:justify-start lg:border-l-2 lg:border-b lg:border-l-transparent lg:data-[active]:border-l-primary"
+            className="group/tab h-auto !w-auto !flex-none justify-start gap-2 border-x-0 border-t-0 border-b border-border/60 px-4 py-4 font-medium text-muted-foreground whitespace-nowrap rounded-none transition-colors after:hidden hover:bg-primary/8 hover:text-foreground data-[active]:border-primary/35 data-[active]:!bg-primary/16 data-[active]:text-foreground lg:!w-full lg:!flex-1"
           >
-            Perfiles clientes
+            <span className="bg-muted/55 text-muted-foreground flex size-6 items-center justify-center rounded-full transition-colors group-data-[active]/tab:bg-primary/28 group-data-[active]/tab:text-primary">
+              <FileUser className="size-3.5" />
+            </span>
+            <span>Perfiles clientes</span>
+          </TabsTrigger>
+          <TabsTrigger
+            value="calendar"
+            className="group/tab h-auto !w-auto !flex-none justify-start gap-2 border-x-0 border-t-0 border-b border-border/60 px-4 py-4 font-medium text-muted-foreground whitespace-nowrap rounded-none transition-colors after:hidden hover:bg-primary/8 hover:text-foreground data-[active]:border-primary/35 data-[active]:!bg-primary/16 data-[active]:text-foreground lg:!w-full lg:!flex-1"
+          >
+            <span className="bg-muted/55 text-muted-foreground flex size-6 items-center justify-center rounded-full transition-colors group-data-[active]/tab:bg-primary/28 group-data-[active]/tab:text-primary">
+              <CalendarDays className="size-3.5" />
+            </span>
+            <span>Calendario citas</span>
           </TabsTrigger>
           <TabsTrigger
             value="interpretations"
-            className="h-11 !w-auto !flex-none justify-center border-b border-border/70 px-3 font-medium text-muted-foreground whitespace-nowrap rounded-none transition-colors after:hidden hover:bg-primary/5 hover:text-foreground [transform:none] data-[active]:[transform:none] data-[active]:rounded-none data-[active]:border-primary/50 data-[active]:!bg-primary/20 data-[active]:text-primary lg:!w-full lg:!flex-1 lg:justify-start lg:border-l-2 lg:border-b lg:border-l-transparent lg:data-[active]:border-l-primary"
+            className="group/tab h-auto !w-auto !flex-none justify-start gap-2 border-x-0 border-t-0 border-b border-border/60 px-4 py-4 font-medium text-muted-foreground whitespace-nowrap rounded-none transition-colors after:hidden hover:bg-primary/8 hover:text-foreground data-[active]:border-primary/35 data-[active]:!bg-primary/16 data-[active]:text-foreground lg:!w-full lg:!flex-1"
           >
-            Combinaciones planetas signos
+            <span className="bg-muted/55 text-muted-foreground flex size-6 items-center justify-center rounded-full transition-colors group-data-[active]/tab:bg-primary/28 group-data-[active]/tab:text-primary">
+              <Sparkles className="size-3.5" />
+            </span>
+            <span>Interpretaciones</span>
           </TabsTrigger>
         </TabsList>
       </aside>
@@ -44,6 +67,13 @@ export function AdminContentPanel({ profiles, absoluteShare, interpretationEntri
             Edita el contenido para cada combinación de sefirá + planeta natural + signo.
           </p>
           <InterpretationEditorPanel entries={interpretationEntries} />
+        </TabsContent>
+
+        <TabsContent value="calendar" className="space-y-4">
+          <p className="text-muted-foreground text-sm">
+            Visualiza sesiones por cliente en formato mensual o semanal.
+          </p>
+          <AdminClientCalendarPanel initialAppointments={calendarAppointments} />
         </TabsContent>
       </main>
     </Tabs>

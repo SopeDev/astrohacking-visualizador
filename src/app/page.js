@@ -1,5 +1,5 @@
 import { headers } from 'next/headers'
-import { listProfiles, listSephirotInterpretations } from '@/db/queries'
+import { listAppointmentsInRange, listProfiles, listSephirotInterpretations } from '@/db/queries'
 import { AdminContentPanel } from '@/components/AdminContentPanel/AdminContentPanel'
 import { describeDbError } from '@/utils/describeDbError'
 
@@ -13,12 +13,17 @@ export default async function Home() {
 
   let profiles = []
   let interpretationEntries = []
+  let calendarAppointments = []
   /** @type {ReturnType<typeof describeDbError> | null} */
   let dbError = null
   try {
-    const [profilesRows, interpretationRows] = await Promise.all([
+    const now = new Date()
+    const monthStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, 0, 0, 0))
+    const monthEnd = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 0, 23, 59, 59))
+    const [profilesRows, interpretationRows, appointmentRows] = await Promise.all([
       listProfiles(),
       listSephirotInterpretations(),
+      listAppointmentsInRange(monthStart, monthEnd),
     ])
     profiles = profilesRows
     interpretationEntries = interpretationRows.map((row) => ({
@@ -26,14 +31,15 @@ export default async function Home() {
       sections:
         typeof row.sections === 'object' && row.sections !== null ? row.sections : {},
     }))
+    calendarAppointments = appointmentRows
   } catch (err) {
     console.error('Root page DB load failed', err)
     dbError = describeDbError(err)
   }
 
   return (
-    <div className="bg-background text-foreground">
-      <div className="border-border border-b px-4 py-6 sm:px-6 lg:px-8">
+    <div className="bg-background text-foreground [--admin-header-h:7rem] sm:[--admin-header-h:8rem]">
+      <div className="border-border flex h-28 items-center border-b px-4 sm:h-32 sm:px-6 lg:px-8">
         <div>
           <p className="text-primary/80 text-xs font-medium tracking-[0.2em] uppercase">
             Astrohacking
@@ -68,7 +74,12 @@ export default async function Home() {
           ) : null}
         </div>
       ) : (
-        <AdminContentPanel profiles={profiles} absoluteShare={absoluteShare} interpretationEntries={interpretationEntries} />
+        <AdminContentPanel
+          profiles={profiles}
+          absoluteShare={absoluteShare}
+          interpretationEntries={interpretationEntries}
+          calendarAppointments={calendarAppointments}
+        />
       )}
     </div>
   )

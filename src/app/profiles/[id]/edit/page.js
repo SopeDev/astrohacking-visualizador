@@ -27,6 +27,7 @@ export default async function EditProfilePage({ params, searchParams }) {
     process.env.NEXT_PUBLIC_SITE_ORIGIN ??
     (host ? `${proto}://${host}` : '')
   const sharePath = absoluteShare ? `${absoluteShare}/p/${profile.id}` : `/p/${profile.id}`
+  const activeCycle = profile.packageCycles.find((cycle) => cycle.status === 'active') ?? null
 
   return (
     <div className="bg-background text-foreground mx-auto max-w-5xl px-4 py-10 sm:px-6">
@@ -64,6 +65,9 @@ export default async function EditProfilePage({ params, searchParams }) {
             typeof profile.assignments === 'object' && profile.assignments !== null
               ? /** @type {Record<string, string>} */ (profile.assignments)
               : {},
+          packageCycles: profile.packageCycles,
+          activeCycle,
+          appointments: profile.appointments,
         }}
       />
     </div>

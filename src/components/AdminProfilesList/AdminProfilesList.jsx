@@ -6,10 +6,11 @@ import { useMemo, useState } from 'react'
 import { buttonVariants } from '@/components/ui/button-variants'
 import { CopyShareButton } from '@/components/CopyShareButton/CopyShareButton'
 import { DeleteProfileButton } from '@/components/DeleteProfileButton/DeleteProfileButton'
+import { THERAPY_PACKAGE_MAP } from '@/data/therapyPackages'
 
 /**
  * @param {{
- *   rows: Array<{ id: string, label: string }>
+ *   rows: Array<{ id: string, label: string, packageSummary?: { packageType: string, remainingSessions: number } | null }>
  *   absoluteShare: string
  *   createHref?: string
  * }} props
@@ -56,6 +57,15 @@ export function AdminProfilesList({ rows, absoluteShare, createHref = '/profiles
             >
               <div className="min-w-0">
                 <p className="text-foreground font-medium">{p.label}</p>
+                {p.packageSummary ? (
+                  <p className="text-xs text-muted-foreground">
+                    {THERAPY_PACKAGE_MAP[p.packageSummary.packageType]?.label ??
+                      p.packageSummary.packageType}{' '}
+                    - restantes: {p.packageSummary.remainingSessions}
+                  </p>
+                ) : (
+                  <p className="text-xs text-muted-foreground">Sin paquete asignado</p>
+                )}
               </div>
               <div className="flex flex-wrap items-center gap-2">
                 <Link
