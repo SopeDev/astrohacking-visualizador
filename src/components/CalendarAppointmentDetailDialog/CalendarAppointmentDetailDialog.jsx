@@ -18,7 +18,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
-import { SESSION_DURATION_MINUTES, THERAPY_PACKAGE_MAP } from '@/data/therapyPackages'
+import { THERAPY_PACKAGE_MAP } from '@/data/therapyPackages'
 import { formatSessionInPackageLabel } from '@/lib/sessionCycleLabel'
 
 function toDateTimeLocalValue(dateLike) {
@@ -121,12 +121,6 @@ export function CalendarAppointmentDetailDialog({
             {sessionInPackageLabel ? (
               <p className="text-muted-foreground text-xs">{sessionInPackageLabel}</p>
             ) : null}
-          </div>
-          <div className="space-y-1 text-sm">
-            <p className="text-muted-foreground text-xs font-medium uppercase tracking-wide">
-              Duración
-            </p>
-            <p>{SESSION_DURATION_MINUTES} minutos</p>
           </div>
           <div className="space-y-1 text-sm">
             <p className="text-muted-foreground text-xs font-medium uppercase tracking-wide">

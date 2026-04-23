@@ -210,7 +210,10 @@ export function AdminClientCalendarPanel({ initialAppointments = [] }) {
     if (view === 'week') {
       return formatWeekRangeLabel(anchorDate)
     }
-    return anchorDate.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })
+    const rawMonth = anchorDate.toLocaleDateString('es-ES', { month: 'long' })
+    const monthTitle =
+      rawMonth.charAt(0).toLocaleUpperCase('es-ES') + rawMonth.slice(1)
+    return `${monthTitle} ${anchorDate.getFullYear()}`
   }, [anchorDate, view])
 
   const prevNavLabel = view === 'week' ? 'Semana anterior' : 'Mes anterior'
@@ -219,7 +222,7 @@ export function AdminClientCalendarPanel({ initialAppointments = [] }) {
   return (
     <section className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           <Button variant={view === 'month' ? 'default' : 'outline'} size="sm" onClick={() => setView('month')}>
             Mes
           </Button>
@@ -227,14 +230,14 @@ export function AdminClientCalendarPanel({ initialAppointments = [] }) {
             Semana
           </Button>
         </div>
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-end">
-          <Button variant="outline" size="sm" onClick={() => movePeriod(-1)}>
+        <div className="flex min-w-0 flex-1 flex-nowrap items-center justify-end gap-2">
+          <Button variant="outline" size="sm" className="shrink-0" onClick={() => movePeriod(-1)}>
             {prevNavLabel}
           </Button>
-          <p className="text-foreground min-w-[min(100%,220px)] max-w-[min(100vw-2rem,320px)] flex-1 text-center text-sm font-medium capitalize">
+          <p className="text-foreground shrink truncate px-1 text-center text-sm font-medium capitalize">
             {periodLabel}
           </p>
-          <Button variant="outline" size="sm" onClick={() => movePeriod(1)}>
+          <Button variant="outline" size="sm" className="shrink-0" onClick={() => movePeriod(1)}>
             {nextNavLabel}
           </Button>
         </div>
